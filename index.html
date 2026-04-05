@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Трембіта — Твій затишний дім поряд зі Львовом</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #C9A84C;
+      --accent-rgb: 201, 168, 76;
+      --accent-light: #E2C06A;
+      --bg: #0F1923;
+      --bg-card: rgba(255,255,255,0.03);
+      --border: rgba(255,255,255,0.06);
+      --text: #FFFFFF;
+      --text-secondary: rgba(255,255,255,0.5);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: auto; }
+    body { background: var(--bg); color: var(--text); font-family: 'Archivo', sans-serif; overflow-x: hidden; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(var(--accent), var(--accent-light)); border-radius: 3px; }
+
+    /* Selection */
+    ::selection { background: var(--accent); color: #000; }
+
+    /* ─── STARSCAPE ─── */
+    #starscape { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0.5; }
+
+    /* ─── SCROLL PROGRESS ─── */
+    #scrollProgress { position: fixed; top: 0; left: 0; height: 3px; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent-light)); z-index: 10000; transition: width 0.1s linear; }
+
+    /* ─── LOADER ─── */
+    #loader { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 24px; transition: opacity 0.6s ease; }
+    .loader-logo { width: 120px; }
+    .loader-logo svg { width: 100%; height: auto; }
+    .loader-text { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 3px; text-transform: uppercase; }
+    .loader-bar-track { width: 200px; height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+    .loader-bar-fill { height: 100%; width: 0%; background: var(--accent); transition: width 0.3s ease; border-radius: 2px; }
+
+    /* ─── NAVBAR ─── */
+    #navbar { position: fixed; top: 12px; left: 0; right: 0; z-index: 1000; transition: all 0.4s cubic-bezier(0.16,1,0.3,1); }
+    .nav-inner { max-width: 100%; margin: 0 auto; padding: 12px 32px; display: flex; justify-content: space-between; align-items: center; transition: all 0.4s cubic-bezier(0.16,1,0.3,1); }
+    #navbar.nav-scrolled .nav-inner { max-width: 860px; background: rgba(15,25,35,0.7); border: 1px solid var(--border); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 100px; padding: 10px 24px; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo svg { height: 32px; width: auto; }
+    .nav-logo-text { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--text); }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta { background: var(--accent) !important; color: #000 !important; padding: 8px 20px; border-radius: 100px; font-weight: 600 !important; font-size: 0.85rem !important; }
+    @media (max-width: 768px) { .nav-links { display: none; } }
+
+    /* ─── HERO ─── */
+    #hero { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; z-index: 1; }
+    .hero-bg { position: absolute; inset: 0; pointer-events: none; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(80px); }
+    .orb-1 { width: 500px; height: 500px; background: var(--accent); top: -200px; right: -100px; opacity: 0.12; }
+    .orb-2 { width: 400px; height: 400px; background: var(--accent); bottom: -150px; left: -100px; opacity: 0.07; }
+    .grid-overlay { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px); background-size: 60px 60px; }
+    .hero-content { position: relative; z-index: 2; max-width: 800px; padding: 0 24px; }
+    .hero-badge { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent); background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.2); border-radius: 100px; padding: 6px 16px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; }
+    .hero-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.8rem, 7vw, 5rem); font-weight: 700; line-height: 1.05; margin-bottom: 20px; }
+    .hero-title span { color: var(--accent); }
+    .hero-subtitle { font-size: 1.15rem; color: var(--text-secondary); line-height: 1.6; max-width: 560px; margin: 0 auto 36px; }
+    .hero-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: var(--accent); color: #000; padding: 14px 32px; border-radius: 12px; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.95rem; text-decoration: none; box-shadow: 0 0 24px rgba(201,168,76,0.3); transition: all 0.3s ease; display: inline-block; }
+    .btn-primary:hover { box-shadow: 0 0 36px rgba(201,168,76,0.5); transform: translateY(-2px); }
+    .btn-secondary { background: transparent; color: var(--text); padding: 14px 32px; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 0.95rem; text-decoration: none; transition: all 0.3s ease; display: inline-block; }
+    .btn-secondary:hover { border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.04); }
+    .scroll-hint { position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 0.75rem; letter-spacing: 1px; animation: bounce 2s infinite; }
+    .scroll-arrow { width: 1px; height: 36px; background: linear-gradient(var(--accent), transparent); }
+    @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(6px); } }
+
+    /* ─── SCROLL ANIMATION ─── */
+    .scroll-animation { height: 350vh; position: relative; z-index: 1; }
+    .scroll-sticky { position: sticky; top: 0; height: 100vh; width: 100%; overflow: hidden; }
+    #frameCanvas { position: absolute; top: 0; left: 0; }
+    @media (max-width: 1024px) { .scroll-animation { height: 300vh; } }
+    @media (max-width: 768px) { .scroll-animation { height: 250vh; } }
+
+    /* ─── ANNOTATION CARDS ─── */
+    .annotation-card { position: absolute; bottom: 8vh; left: 5vw; max-width: 340px; background: rgba(15,25,35,0.75); border: 1px solid rgba(201,168,76,0.15); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 20px; padding: 24px; opacity: 0; transform: translateY(20px); transition: opacity 0.4s ease, transform 0.4s ease; pointer-events: none; z-index: 10; }
+    .annotation-card.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .card-number { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--accent); margin-bottom: 8px; letter-spacing: 1px; }
+    .card-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 6px; }
+    .card-desc { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 14px; }
+    .card-stat-number { font-size: 1.9rem; font-weight: 700; color: var(--accent); display: block; }
+    .card-stat-label { font-size: 0.75rem; color: var(--text-secondary); display: block; margin-top: 2px; }
+    @media (max-width: 768px) { .annotation-card { bottom: 2vh; left: 2vw; right: 2vw; max-width: none; padding: 12px 16px; display: flex; align-items: center; gap: 12px; } .card-desc, .card-stat { display: none; } .card-number { margin-bottom: 0; } }
+
+    /* ─── SPECS ─── */
+    #specs { position: relative; z-index: 1; }
+    .specs-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 40px; max-width: 1000px; margin: 0 auto; padding: 100px 32px; text-align: center; }
+    .spec-item { display: flex; flex-direction: column; align-items: center; }
+    .spec-number { font-family: 'Space Grotesk', sans-serif; font-size: 3.2rem; font-weight: 700; display: block; color: var(--accent); transition: text-shadow 0.3s ease; }
+    .spec-number.counting { text-shadow: 0 0 20px rgba(201,168,76,0.5); }
+    .spec-label { font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px; display: block; line-height: 1.4; }
+    @media (max-width: 768px) { .specs-grid { grid-template-columns: repeat(2,1fr); gap: 32px; padding: 60px 24px; } .spec-number { font-size: 2.4rem; } }
+
+    /* ─── FEATURES ─── */
+    #features { position: relative; z-index: 1; padding: 20px 0 80px; }
+    .section-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.8rem,4vw,2.6rem); font-weight: 700; text-align: center; margin-bottom: 12px; }
+    .section-subtitle { text-align: center; color: var(--text-secondary); font-size: 1rem; margin-bottom: 48px; }
+    .features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+    .feature-card { background: var(--bg-card); border: 1px solid var(--border); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 20px; padding: 28px; transition: transform 0.3s ease, border-color 0.3s ease; }
+    .feature-card:hover { transform: translateY(-4px); border-color: rgba(201,168,76,0.2); }
+    .feature-icon { font-size: 2rem; margin-bottom: 14px; display: block; }
+    .feature-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; }
+    .feature-card p { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6; }
+    @media (max-width: 900px) { .features-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 600px) { .features-grid { grid-template-columns: 1fr; padding: 0 16px; } }
+
+    /* ─── CTA ─── */
+    #cta { position: relative; z-index: 1; text-align: center; padding: 100px 32px; overflow: hidden; }
+    #cta .orb { position: absolute; width: 600px; height: 600px; background: var(--accent); top: 50%; left: 50%; transform: translate(-50%,-50%); opacity: 0.06; filter: blur(100px); border-radius: 50%; }
+    .cta-content { position: relative; z-index: 2; max-width: 620px; margin: 0 auto; }
+    .cta-content h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.8rem,4vw,2.6rem); font-weight: 700; margin-bottom: 16px; }
+    .cta-content p { color: var(--text-secondary); font-size: 1rem; margin-bottom: 36px; line-height: 1.6; }
+    .btn-large { font-size: 1.05rem; padding: 16px 44px; }
+    .cta-form { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+    .cta-input { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 12px; padding: 14px 20px; color: var(--text); font-family: 'Archivo', sans-serif; font-size: 0.95rem; width: 280px; outline: none; transition: border-color 0.2s; }
+    .cta-input:focus { border-color: rgba(201,168,76,0.4); }
+    .cta-input::placeholder { color: var(--text-secondary); }
+
+    /* ─── TESTIMONIALS ─── */
+    #testimonials { position: relative; z-index: 1; padding: 80px 0; }
+    .testimonials-track { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 20px 32px 40px; -webkit-overflow-scrolling: touch; scrollbar-width: none; cursor: grab; }
+    .testimonials-track::-webkit-scrollbar { display: none; }
+    .testimonials-track.dragging { cursor: grabbing; }
+    .testimonial-card { min-width: 340px; scroll-snap-align: start; background: var(--bg-card); border: 1px solid var(--border); backdrop-filter: blur(20px); border-radius: 20px; padding: 28px; flex-shrink: 0; }
+    .testimonial-stars { color: var(--accent); font-size: 1rem; margin-bottom: 16px; letter-spacing: 2px; }
+    .testimonial-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+    .testimonial-text::before { content: '"'; color: var(--accent); font-size: 1.2rem; }
+    .testimonial-text::after { content: '"'; color: var(--accent); font-size: 1.2rem; }
+    .author-name { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.95rem; display: block; }
+    .author-role { font-size: 0.8rem; color: var(--text-secondary); display: block; margin-top: 2px; }
+
+    /* ─── FOOTER ─── */
+    footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 56px 32px 36px; text-align: center; }
+    .footer-inner { max-width: 900px; margin: 0 auto; }
+    .footer-brand { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; }
+    .footer-brand svg { height: 28px; width: auto; opacity: 0.7; }
+    .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 20px; }
+    .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.875rem; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { color: rgba(255,255,255,0.25); font-size: 0.78rem; }
+  </style>
+</head>
+<body>
+
+<!-- Starscape -->
+<canvas id="starscape"></canvas>
+
+<!-- Scroll Progress -->
+<div id="scrollProgress"></div>
+
+<!-- Loader -->
+<div id="loader">
+  <div class="loader-logo">
+    <svg width="242" height="125" viewBox="0 0 242 125" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_1079_3232)"><path d="M42.2316 87.7401H34.179V85.5806H54.2211V87.7401H45.9895V108.26H42.2316V87.7401Z" fill="#FFFFFF"/><path d="M58.337 85.5806H65.8529C68.7161 85.5806 70.8634 86.1201 72.4739 87.3799C74.0844 88.6406 74.8002 90.2599 74.8002 92.4202C74.8002 94.5806 74.0844 96.2007 72.4739 97.4605C70.8634 98.7204 68.7161 99.2599 65.8529 99.2599H62.095V108.26H58.337V85.5806ZM65.8529 97.2804C67.4634 97.2804 68.716 96.9202 69.6107 96.0206C70.5055 95.1201 71.0424 94.0403 71.0424 92.4202C71.0424 90.8002 70.5055 89.7204 69.6107 88.8199C68.716 87.9202 67.4634 87.56 65.8529 87.56H62.095V97.2804H65.8529Z" fill="#FFFFFF"/><path d="M79.9893 85.5806H93.9469V87.56H83.9259V95.8405H91.0837V97.8199H83.9259V106.1H95.3784V108.08H80.1682V85.5806H79.9893Z" fill="#FFFFFF"/><path d="M101.667 85.5806H109.183C112.046 85.5806 114.193 86.1201 115.804 87.3799C117.414 88.6406 118.13 90.2599 118.13 92.4202C118.13 94.5806 117.414 96.2007 115.804 97.4605C114.193 98.7204 112.046 99.2599 109.183 99.2599H105.425V108.26H101.667V85.5806ZM109.183 97.2804C110.793 97.2804 112.046 96.9202 112.941 96.0206C113.835 95.1201 114.372 94.0403 114.372 92.4202C114.372 90.8002 113.835 89.7204 112.941 88.8199C112.046 87.9202 110.793 87.56 109.183 87.56H105.425V97.2804H109.183Z" fill="#FFFFFF"/></g><defs><clipPath id="clip0_1079_3232"><rect width="242" height="125" fill="white"/></clipPath></defs></svg>
+  </div>
+  <p class="loader-text">Завантаження</p>
+  <div class="loader-bar-track"><div class="loader-bar-fill" id="loaderBar"></div></div>
+</div>
+
+<!-- Navbar -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <svg width="80" height="42" viewBox="0 0 242 125" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M42.2316 87.7401H34.179V85.5806H54.2211V87.7401H45.9895V108.26H42.2316V87.7401Z" fill="#FFFFFF"/><path d="M58.337 85.5806H65.8529C68.7161 85.5806 70.8634 86.1201 72.4739 87.3799C74.0844 88.6406 74.8002 90.2599 74.8002 92.4202C74.8002 94.5806 74.0844 96.2007 72.4739 97.4605C70.8634 98.7204 68.7161 99.2599 65.8529 99.2599H62.095V108.26H58.337V85.5806ZM65.8529 97.2804C67.4634 97.2804 68.716 96.9202 69.6107 96.0206C70.5055 95.1201 71.0424 94.0403 71.0424 92.4202C71.0424 90.8002 70.5055 89.7204 69.6107 88.8199C68.716 87.9202 67.4634 87.56 65.8529 87.56H62.095V97.2804H65.8529Z" fill="#FFFFFF"/><path d="M79.9893 85.5806H93.9469V87.56H83.9259V95.8405H91.0837V97.8199H83.9259V106.1H95.3784V108.08H80.1682V85.5806H79.9893Z" fill="#FFFFFF"/><path d="M101.667 85.5806H109.183C112.046 85.5806 114.193 86.1201 115.804 87.3799C117.414 88.6406 118.13 90.2599 118.13 92.4202C118.13 94.5806 117.414 96.2007 115.804 97.4605C114.193 98.7204 112.046 99.2599 109.183 99.2599H105.425V108.26H101.667V85.5806ZM109.183 97.2804C110.793 97.2804 112.046 96.9202 112.941 96.0206C113.835 95.1201 71.0424 94.0403 112.941 88.8199C112.046 87.9202 110.793 87.56 109.183 87.56H105.425V97.2804H109.183Z" fill="#FFFFFF"/></svg>
+      <span class="nav-logo-text">Трембіта</span>
+    </a>
+    <div class="nav-links">
+      <a href="#features">Житло</a>
+      <a href="#specs">Про нас</a>
+      <a href="#testimonials">Відгуки</a>
+      <a href="#cta" class="nav-cta">Залишити заявку</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section id="hero">
+  <div class="hero-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="grid-overlay"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">с. Ременів · Львівська область</div>
+    <h1 class="hero-title">Твій затишний дім<br><span>поряд зі Львовом</span></h1>
+    <p class="hero-subtitle">Будуємо приватні будинки, таунхауси та квартирні будинки в екологічно чистому місці — лише 15 хвилин від центру міста.</p>
+    <div class="hero-buttons">
+      <a href="#cta" class="btn-primary">Обрати свій дім</a>
+      <a href="#features" class="btn-secondary">Дізнатись більше</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Гортайте вниз</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- Scroll Animation -->
+<section class="scroll-animation">
+  <div class="scroll-sticky">
+    <canvas id="frameCanvas"></canvas>
+
+    <div class="annotation-card" data-show="0.08" data-hide="0.28">
+      <div class="card-number">01 — ФУНДАМЕНТ</div>
+      <div class="card-body">
+        <h3 class="card-title">Надійна основа</h3>
+        <p class="card-desc">Монолітне залізобетонне будівництво за сучасними нормами сейсмостійкості та енергоефективності.</p>
+        <div class="card-stat">
+          <span class="card-stat-number">20+</span>
+          <span class="card-stat-label">років досвіду</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation-card" data-show="0.30" data-hide="0.50">
+      <div class="card-number">02 — КОМФОРТ</div>
+      <div class="card-body">
+        <h3 class="card-title">Тепло в кожній деталі</h3>
+        <p class="card-desc">Підлогове опалення, панорамні вікна з потрійним склінням, якісна вентиляція та ізоляція.</p>
+        <div class="card-stat">
+          <span class="card-stat-number">A++</span>
+          <span class="card-stat-label">клас енергоефективності</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation-card" data-show="0.52" data-hide="0.72">
+      <div class="card-number">03 — ПРОСТІР</div>
+      <div class="card-body">
+        <h3 class="card-title">Для вашої родини</h3>
+        <p class="card-desc">Від затишної квартири до просторого приватного будинку — три формати житла під будь-яку сім'ю.</p>
+        <div class="card-stat">
+          <span class="card-stat-number">75–225</span>
+          <span class="card-stat-label">м² площі</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation-card" data-show="0.74" data-hide="0.95">
+      <div class="card-number">04 — ЛОКАЦІЯ</div>
+      <div class="card-body">
+        <h3 class="card-title">Природа та місто поряд</h3>
+        <p class="card-desc">Ремeнів — зелений куточок поруч з Львовом. Ліс, чисте повітря та 15 хвилин до центру.</p>
+        <div class="card-stat">
+          <span class="card-stat-number">15 хв</span>
+          <span class="card-stat-label">до центру Львова</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Specs -->
+<section id="specs">
+  <div class="specs-grid">
+    <div class="spec-item" data-target="20" data-suffix="+">
+      <span class="spec-number">0</span>
+      <span class="spec-label">Років будуємо якісне житло</span>
+    </div>
+    <div class="spec-item" data-target="3" data-suffix="">
+      <span class="spec-number">0</span>
+      <span class="spec-label">Формати житла на вибір</span>
+    </div>
+    <div class="spec-item" data-target="15" data-suffix=" хв">
+      <span class="spec-number">0</span>
+      <span class="spec-label">До центру Львова</span>
+    </div>
+    <div class="spec-item" data-target="100" data-suffix="+">
+      <span class="spec-number">0</span>
+      <span class="spec-label">Родин вже живуть в наших будинках</span>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="features">
+  <h2 class="section-title">Наше житло</h2>
+  <p class="section-subtitle">Три формати — одне містечко. Оберіть те, що підходить саме вашій родині.</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon">🏠</span>
+      <h3>Приватні будинки</h3>
+      <p>Повна приватність, власний двір та гараж. Одно- та двоповерхові будинки від 75 до 175 м². Ідеально для великої сім'ї.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🏘</span>
+      <h3>Таунхауси</h3>
+      <p>Два поверхи, приватний вхід та затишний дворик. Площа від 95 до 150 м². Оптимальний вибір для молодої сім'ї.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🏢</span>
+      <h3>Квартирні будинки</h3>
+      <p>Сучасні квартири від студії до 4-кімнатних. Від 40 м². Підземний паркінг, ліфт, охорона — все включено.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🌿</span>
+      <h3>Природа та екологія</h3>
+      <p>Ліс поряд, чисте повітря, тиша. Ідеальне місце для виховання дітей і відпочинку від міського ритму.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">💳</span>
+      <h3>єОселя та розтермінування</h3>
+      <p>Придбання за державною програмою єОселя. Пільгова ставка від 3%. Також власне розтермінування від забудовника.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔑</span>
+      <h3>Здача під ключ</h3>
+      <p>Повне оздоблення або без — на ваш вибір. Гарантуємо дотримання термінів і якість згідно з договором.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="orb"></div>
+  <div class="cta-content">
+    <h2>Готові знайти свій дім?</h2>
+    <p>Залиште контакт — наш менеджер зв'яжеться з вами протягом дня, відповість на всі питання та запросить на безкоштовний тур містечком.</p>
+    <div class="cta-form">
+      <input type="tel" class="cta-input" placeholder="Ваш номер телефону">
+      <a href="tel:0671796991" class="btn-primary btn-large">Зателефонувати нам</a>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section id="testimonials">
+  <h2 class="section-title">Що кажуть наші клієнти</h2>
+  <div class="testimonials-track" id="testimonialsTrack">
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">Купили таунхаус торік. Якість будівництва на відмінно, всі терміни виконано точно за договором. Менеджери завжди на зв'язку. Дуже задоволені своїм новим домом!</p>
+      <span class="author-name">Михайло та Оксана К.</span>
+      <span class="author-role">Власники таунхаусу, с. Ременів</span>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">Давно мріяли про приватний будинок поряд зі Львовом. Трембіта втілила нашу мрію. Чисте повітря, ліс поряд, і до роботи 20 хвилин. Про цей переїзд не шкодуємо жодної хвилини!</p>
+      <span class="author-name">Сергій та Надія Г.</span>
+      <span class="author-role">Власники приватного будинку</span>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">Придбали квартиру за програмою єОселя. Менеджери Трембіти допомогли зібрати всі документи і пройти через програму дуже легко. Процес зайняв менше місяця!</p>
+      <span class="author-name">Ірина М.</span>
+      <span class="author-role">Власниця квартири, переїхала зі Стрия</span>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★☆</div>
+      <p class="testimonial-text">Обирали між кількома забудовниками. Трембіта виграла ціною і локацією. Містечко затишне, сусіди хороші, інфраструктура розвивається. Дітям тут дуже подобається!</p>
+      <span class="author-name">Роман В.</span>
+      <span class="author-role">Власник таунхаусу, м. Львів</span>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <svg width="60" height="31" viewBox="0 0 242 125" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M42.2316 87.7401H34.179V85.5806H54.2211V87.7401H45.9895V108.26H42.2316V87.7401Z" fill="#FFFFFF"/><path d="M58.337 85.5806H65.8529C68.7161 85.5806 70.8634 86.1201 72.4739 87.3799C74.0844 88.6406 74.8002 90.2599 74.8002 92.4202C74.8002 94.5806 74.0844 96.2007 72.4739 97.4605C70.8634 98.7204 68.7161 99.2599 65.8529 99.2599H62.095V108.26H58.337V85.5806ZM65.8529 97.2804C67.4634 97.2804 68.716 96.9202 69.6107 96.0206C70.5055 95.1201 71.0424 94.0403 71.0424 92.4202C71.0424 90.8002 70.5055 89.7204 69.6107 88.8199C68.716 87.9202 67.4634 87.56 65.8529 87.56H62.095V97.2804H65.8529Z" fill="#FFFFFF"/><path d="M79.9893 85.5806H93.9469V87.56H83.9259V95.8405H91.0837V97.8199H83.9259V106.1H95.3784V108.08H80.1682V85.5806H79.9893Z" fill="#FFFFFF"/></svg>
+      <span style="font-family:'Space Grotesk',sans-serif;font-weight:600;color:rgba(255,255,255,0.7)">Будівельна компанія «Трембіта»</span>
+    </div>
+    <div class="footer-links">
+      <a href="#features">Житло</a>
+      <a href="tel:0671796991">(067) 179-69-91</a>
+      <a href="tel:0633694881">(063) 369-48-81</a>
+      <a href="#cta">Контакти</a>
+    </div>
+    <p class="footer-copy">&copy; 2026 Будівельна компанія «Трембіта». Всі права захищені. · с. Ременів, Львівська обл.</p>
+  </div>
+</footer>
+
+<script>
+// ─── STARSCAPE ───
+(function() {
+  const canvas = document.getElementById('starscape');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  function resize() {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+  }
+  function initStars() {
+    stars = [];
+    for (let i = 0; i < 180; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 1.2 + 0.3,
+        baseOpacity: Math.random() * 0.6 + 0.2,
+        driftX: (Math.random() - 0.5) * 0.02,
+        driftY: (Math.random() - 0.5) * 0.01,
+        twinkleSpeed: Math.random() * 0.0008 + 0.0003,
+        twinklePhase: Math.random() * Math.PI * 2
+      });
+    }
+  }
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => {
+      s.x += s.driftX; s.y += s.driftY;
+      if (s.x < 0) s.x = canvas.width;
+      if (s.x > canvas.width) s.x = 0;
+      if (s.y < 0) s.y = canvas.height;
+      if (s.y > canvas.height) s.y = 0;
+      const twinkle = Math.sin(Date.now() * s.twinkleSpeed + s.twinklePhase);
+      const opacity = Math.max(0, s.baseOpacity + twinkle * 0.3);
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${opacity})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(animate);
+  }
+  resize(); initStars(); animate();
+  window.addEventListener('resize', () => { resize(); initStars(); });
+})();
+
+// ─── SCROLL PROGRESS ───
+const scrollProgress = document.getElementById('scrollProgress');
+window.addEventListener('scroll', () => {
+  const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  scrollProgress.style.width = pct + '%';
+}, { passive: true });
+
+// ─── NAVBAR ───
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('nav-scrolled', window.scrollY > 80);
+}, { passive: true });
+
+// ─── FRAME SEQUENCE ───
+const FRAME_COUNT = 121;
+const frames = [];
+let loadedCount = 0;
+let currentFrame = -1;
+let ticking = false;
+const loaderBar = document.getElementById('loaderBar');
+const loader = document.getElementById('loader');
+const canvas = document.getElementById('frameCanvas');
+const ctx = canvas.getContext('2d');
+
+function resizeCanvas() {
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = window.innerWidth * dpr;
+  canvas.height = window.innerHeight * dpr;
+  canvas.style.width = window.innerWidth + 'px';
+  canvas.style.height = window.innerHeight + 'px';
+  if (currentFrame >= 0) drawFrame(currentFrame);
+}
+
+function drawFrame(index) {
+  const img = frames[index];
+  if (!img || !img.complete) return;
+  const dpr = window.devicePixelRatio || 1;
+  const cw = canvas.width, ch = canvas.height;
+  ctx.clearRect(0, 0, cw, ch);
+  const imgRatio = img.naturalWidth / img.naturalHeight;
+  const canvasRatio = cw / ch;
+  let dw, dh, dx, dy;
+  if (window.innerWidth > 768) {
+    if (canvasRatio > imgRatio) { dw = cw; dh = cw / imgRatio; }
+    else { dh = ch; dw = ch * imgRatio; }
+  } else {
+    const z = 1.2;
+    if (canvasRatio > imgRatio) { dh = ch * z; dw = dh * imgRatio; }
+    else { dw = cw * z; dh = dw / imgRatio; }
+  }
+  dx = (cw - dw) / 2; dy = (ch - dh) / 2;
+  ctx.drawImage(img, dx, dy, dw, dh);
+}
+
+function onAllFramesLoaded() {
+  loader.style.opacity = '0';
+  setTimeout(() => { loader.style.display = 'none'; }, 600);
+  drawFrame(0);
+}
+
+for (let i = 1; i <= FRAME_COUNT; i++) {
+  const img = new Image();
+  img.src = `frames/frame_${String(i).padStart(4,'0')}.jpg`;
+  img.onload = () => {
+    loadedCount++;
+    loaderBar.style.width = (loadedCount / FRAME_COUNT * 100) + '%';
+    if (loadedCount === FRAME_COUNT) onAllFramesLoaded();
+  };
+  img.onerror = () => {
+    loadedCount++;
+    if (loadedCount === FRAME_COUNT) onAllFramesLoaded();
+  };
+  frames.push(img);
+}
+
+// ─── ANNOTATION CARDS + SNAP-STOP ───
+const cards = document.querySelectorAll('.annotation-card');
+const SNAP_ZONES = Array.from(cards).map(c => ({
+  show: parseFloat(c.dataset.show),
+  hide: parseFloat(c.dataset.hide),
+  snapped: false
+}));
+let isSnapping = false;
+
+function updateCards(progress) {
+  cards.forEach((card, i) => {
+    const z = SNAP_ZONES[i];
+    const visible = progress >= z.show && progress <= z.hide;
+    card.classList.toggle('visible', visible);
+    if (visible && !z.snapped && !isSnapping) {
+      z.snapped = true; isSnapping = true;
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => { document.body.style.overflow = ''; isSnapping = false; }, 600);
+    }
+    if (!visible) z.snapped = false;
+  });
+}
+
+// ─── SCROLL HANDLER ───
+window.addEventListener('scroll', () => {
+  if (!ticking) {
+    requestAnimationFrame(() => {
+      const section = document.querySelector('.scroll-animation');
+      const rect = section.getBoundingClientRect();
+      const scrollable = section.offsetHeight - window.innerHeight;
+      const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
+      const fi = Math.min(FRAME_COUNT - 1, Math.floor(progress * FRAME_COUNT));
+      if (fi !== currentFrame) { currentFrame = fi; drawFrame(fi); }
+      updateCards(progress);
+      ticking = false;
+    });
+    ticking = true;
+  }
+}, { passive: true });
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+// ─── SPECS COUNT-UP ───
+function easeOutExpo(t) { return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
+function countUp(el, target, suffix, duration) {
+  const start = performance.now();
+  el.classList.add('counting');
+  function update(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const v = easeOutExpo(p) * target;
+    el.textContent = (target % 1 === 0 ? Math.floor(v) : v.toFixed(1)) + suffix;
+    if (p < 1) requestAnimationFrame(update);
+    else { el.textContent = target + suffix; el.classList.remove('counting'); }
+  }
+  requestAnimationFrame(update);
+}
+const specObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.spec-item').forEach((item, i) => {
+        setTimeout(() => {
+          countUp(item.querySelector('.spec-number'),
+            parseFloat(item.dataset.target),
+            item.dataset.suffix || '', 1800);
+        }, i * 200);
+      });
+      specObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+specObserver.observe(document.getElementById('specs'));
+
+// ─── TESTIMONIALS DRAG ───
+const track = document.getElementById('testimonialsTrack');
+let isDown = false, startX, scrollLeft;
+track.addEventListener('mousedown', e => { isDown = true; startX = e.pageX - track.offsetLeft; scrollLeft = track.scrollLeft; track.classList.add('dragging'); });
+track.addEventListener('mouseleave', () => { isDown = false; track.classList.remove('dragging'); });
+track.addEventListener('mouseup', () => { isDown = false; track.classList.remove('dragging'); });
+track.addEventListener('mousemove', e => {
+  if (!isDown) return; e.preventDefault();
+  track.scrollLeft = scrollLeft - (e.pageX - track.offsetLeft - startX);
+});
+</script>
+</body>
+</html>
