@@ -118,18 +118,26 @@
     .cta-input::placeholder { color: var(--text-secondary); }
 
     /* ─── TESTIMONIALS ─── */
-    #testimonials { position: relative; z-index: 1; padding: 80px 0; content-visibility: auto; contain-intrinsic-size: 0 400px; }
-    .testimonials-track { display: flex; align-items: stretch; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 20px 32px 40px; -webkit-overflow-scrolling: touch; scrollbar-width: none; cursor: grab; }
-    .testimonials-track::-webkit-scrollbar { display: none; }
-    .testimonials-track.dragging { cursor: grabbing; }
-    .testimonial-card { min-width: 340px; scroll-snap-align: start; background: var(--bg-card); border: 1px solid var(--border); backdrop-filter: blur(20px); border-radius: 20px; padding: 28px; flex-shrink: 0; display: flex; flex-direction: column; }
-    .testimonial-text { flex: 1; }
-    .testimonial-stars { color: var(--accent); font-size: 1rem; margin-bottom: 16px; letter-spacing: 2px; }
-    .testimonial-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
-    .testimonial-text::before { content: '"'; color: var(--accent); font-size: 1.2rem; }
-    .testimonial-text::after { content: '"'; color: var(--accent); font-size: 1.2rem; }
-    .author-name { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.95rem; display: block; }
-    .author-role { font-size: 0.8rem; color: var(--text-secondary); display: block; margin-top: 2px; }
+    #testimonials { position: relative; z-index: 1; padding: 80px 0 60px; content-visibility: auto; contain-intrinsic-size: 0 500px; }
+    .t-carousel { position: relative; overflow: hidden; }
+    .t-track { display: flex; transition: transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94); will-change: transform; }
+    .t-slide { min-width: 100%; padding: 16px clamp(16px, 8vw, 140px); }
+    .t-card { background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 24px; padding: clamp(28px,5vw,52px); position: relative; overflow: hidden; }
+    .t-card::before { content: '\201C'; position: absolute; top: -10px; right: 28px; font-size: 9rem; line-height: 1; color: var(--accent); opacity: 0.12; font-family: Georgia,serif; pointer-events: none; }
+    .t-stars { color: var(--accent); font-size: 1.05rem; letter-spacing: 3px; margin-bottom: 20px; }
+    .t-text { font-size: clamp(1rem,2vw,1.15rem); color: rgba(255,255,255,0.82); line-height: 1.75; margin-bottom: 28px; font-style: italic; }
+    .t-author { display: flex; align-items: center; gap: 14px; }
+    .t-avatar { width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-light)); display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.85rem; color: #000; flex-shrink: 0; }
+    .t-name { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.95rem; display: block; }
+    .t-role { font-size: 0.8rem; color: var(--text-secondary); display: block; margin-top: 3px; }
+    .t-controls { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 32px; padding: 0 32px; }
+    .t-arrow { width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.2s, background 0.2s, transform 0.15s; flex-shrink: 0; }
+    .t-arrow:hover { border-color: var(--accent); background: rgba(201,168,76,0.1); transform: scale(1.08); }
+    .t-arrow svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .t-dots { display: flex; gap: 8px; }
+    .t-dot { width: 8px; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.18); cursor: pointer; transition: background 0.3s, width 0.3s; border: none; padding: 0; }
+    .t-dot.active { background: var(--accent); width: 28px; }
+    @media (max-width: 768px) { .t-slide { padding: 8px 16px; } .t-card { padding: 24px 20px; } .t-card::before { font-size: 6rem; } .t-text { font-size: 0.95rem; } }
 
     /* ─── FOOTER ─── */
     footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 56px 32px 36px; text-align: center; }
@@ -280,31 +288,71 @@
 <!-- Testimonials -->
 <section id="testimonials">
   <h2 class="section-title">Що кажуть наші клієнти</h2>
-  <div class="testimonials-track" id="testimonialsTrack">
-    <div class="testimonial-card">
-      <div class="testimonial-stars">★★★★★</div>
-      <p class="testimonial-text">Купили таунхаус торік. Якість будівництва на відмінно, всі терміни виконано точно за договором. Менеджери завжди на зв'язку. Дуже задоволені своїм новим домом!</p>
-      <span class="author-name">Михайло та Оксана К.</span>
-      <span class="author-role">Власники таунхаусу, с. Ременів</span>
+  <p class="section-subtitle">Реальні відгуки від власників житла в «Континенті»</p>
+  <div class="t-carousel">
+    <div class="t-track" id="tTrack">
+      <div class="t-slide">
+        <div class="t-card">
+          <div class="t-stars">★★★★★</div>
+          <p class="t-text">Купили таунхаус торік. Якість будівництва на відмінно, всі терміни виконано точно за договором. Менеджери завжди на зв'язку. Дуже задоволені своїм новим домом!</p>
+          <div class="t-author">
+            <div class="t-avatar">МО</div>
+            <div>
+              <strong class="t-name">Михайло та Оксана К.</strong>
+              <span class="t-role">Власники таунхаусу · с. Ременів</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="t-slide">
+        <div class="t-card">
+          <div class="t-stars">★★★★★</div>
+          <p class="t-text">Давно мріяли про приватний будинок поряд зі Львовом. Трембіта втілила нашу мрію. Чисте повітря, ліс поряд, і до роботи 20 хвилин. Про цей переїзд не шкодуємо жодної хвилини!</p>
+          <div class="t-author">
+            <div class="t-avatar">СН</div>
+            <div>
+              <strong class="t-name">Сергій та Надія Г.</strong>
+              <span class="t-role">Власники приватного будинку</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="t-slide">
+        <div class="t-card">
+          <div class="t-stars">★★★★★</div>
+          <p class="t-text">Придбали квартиру за програмою єОселя. Менеджери Трембіти допомогли зібрати всі документи і пройти через програму дуже легко. Процес зайняв менше місяця!</p>
+          <div class="t-author">
+            <div class="t-avatar">ІМ</div>
+            <div>
+              <strong class="t-name">Ірина М.</strong>
+              <span class="t-role">Власниця квартири · переїхала зі Стрия</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="t-slide">
+        <div class="t-card">
+          <div class="t-stars">★★★★☆</div>
+          <p class="t-text">Обирали між кількома забудовниками. Трембіта виграла ціною і локацією. Містечко затишне, сусіди хороші, інфраструктура розвивається. Дітям тут дуже подобається!</p>
+          <div class="t-author">
+            <div class="t-avatar">РВ</div>
+            <div>
+              <strong class="t-name">Роман В.</strong>
+              <span class="t-role">Власник таунхаусу · м. Львів</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="testimonial-card">
-      <div class="testimonial-stars">★★★★★</div>
-      <p class="testimonial-text">Давно мріяли про приватний будинок поряд зі Львовом. Трембіта втілила нашу мрію. Чисте повітря, ліс поряд, і до роботи 20 хвилин. Про цей переїзд не шкодуємо жодної хвилини!</p>
-      <span class="author-name">Сергій та Надія Г.</span>
-      <span class="author-role">Власники приватного будинку</span>
-    </div>
-    <div class="testimonial-card">
-      <div class="testimonial-stars">★★★★★</div>
-      <p class="testimonial-text">Придбали квартиру за програмою єОселя. Менеджери Трембіти допомогли зібрати всі документи і пройти через програму дуже легко. Процес зайняв менше місяця!</p>
-      <span class="author-name">Ірина М.</span>
-      <span class="author-role">Власниця квартири, переїхала зі Стрия</span>
-    </div>
-    <div class="testimonial-card">
-      <div class="testimonial-stars">★★★★☆</div>
-      <p class="testimonial-text">Обирали між кількома забудовниками. Трембіта виграла ціною і локацією. Містечко затишне, сусіди хороші, інфраструктура розвивається. Дітям тут дуже подобається!</p>
-      <span class="author-name">Роман В.</span>
-      <span class="author-role">Власник таунхаусу, м. Львів</span>
-    </div>
+  </div>
+  <div class="t-controls">
+    <button class="t-arrow" id="tPrev" aria-label="Попередній">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <div class="t-dots" id="tDots"></div>
+    <button class="t-arrow" id="tNext" aria-label="Наступний">
+      <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+    </button>
   </div>
 </section>
 
@@ -435,16 +483,53 @@ const specObserver = new IntersectionObserver(entries => {
 }, { threshold: 0.3 });
 specObserver.observe(document.getElementById('specs'));
 
-// ─── TESTIMONIALS DRAG ───
-const track = document.getElementById('testimonialsTrack');
-let isDown = false, startX, scrollLeft;
-track.addEventListener('mousedown', e => { isDown = true; startX = e.pageX - track.offsetLeft; scrollLeft = track.scrollLeft; track.classList.add('dragging'); });
-track.addEventListener('mouseleave', () => { isDown = false; track.classList.remove('dragging'); });
-track.addEventListener('mouseup', () => { isDown = false; track.classList.remove('dragging'); });
-track.addEventListener('mousemove', e => {
-  if (!isDown) return; e.preventDefault();
-  track.scrollLeft = scrollLeft - (e.pageX - track.offsetLeft - startX);
-});
+// ─── TESTIMONIALS CAROUSEL ───
+(function() {
+  const track = document.getElementById('tTrack');
+  const dotsWrap = document.getElementById('tDots');
+  const slides = track.querySelectorAll('.t-slide');
+  const total = slides.length;
+  let cur = 0, autoTimer, touchStartX = 0;
+
+  // build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 't-dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('aria-label', 'Слайд ' + (i + 1));
+    d.addEventListener('click', () => go(i));
+    dotsWrap.appendChild(d);
+  });
+
+  function go(idx) {
+    cur = (idx + total) % total;
+    track.style.transform = `translateX(-${cur * 100}%)`;
+    dotsWrap.querySelectorAll('.t-dot').forEach((d, i) => d.classList.toggle('active', i === cur));
+    resetAuto();
+  }
+
+  function resetAuto() {
+    clearInterval(autoTimer);
+    autoTimer = setInterval(() => go(cur + 1), 5000);
+  }
+
+  document.getElementById('tPrev').addEventListener('click', () => go(cur - 1));
+  document.getElementById('tNext').addEventListener('click', () => go(cur + 1));
+
+  // swipe
+  track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  track.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) go(dx < 0 ? cur + 1 : cur - 1);
+  }, { passive: true });
+
+  // keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') go(cur - 1);
+    if (e.key === 'ArrowRight') go(cur + 1);
+  });
+
+  resetAuto();
+})();
 </script>
 </body>
 </html>
