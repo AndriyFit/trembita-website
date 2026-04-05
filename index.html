@@ -38,7 +38,7 @@
     /* ─── LOADER ─── */
     #loader { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 24px; transition: opacity 0.6s ease; }
     .loader-logo { width: 120px; }
-    .loader-logo svg { width: 100%; height: auto; }
+    .loader-logo img { width: 100%; height: auto; }
     .loader-text { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 3px; text-transform: uppercase; }
     .loader-bar-track { width: 200px; height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
     .loader-bar-fill { height: 100%; width: 0%; background: var(--accent); transition: width 0.3s ease; border-radius: 2px; }
@@ -48,7 +48,7 @@
     .nav-inner { max-width: 100%; margin: 0 auto; padding: 12px 32px; display: flex; justify-content: space-between; align-items: center; transition: all 0.4s cubic-bezier(0.16,1,0.3,1); }
     #navbar.nav-scrolled .nav-inner { max-width: 860px; background: rgba(15,25,35,0.7); border: 1px solid var(--border); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 100px; padding: 10px 24px; }
     .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .nav-logo svg { height: 32px; width: auto; }
+    .nav-logo img { height: 32px; width: auto; }
     .nav-logo-text { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--text); }
     .nav-links { display: flex; align-items: center; gap: 28px; }
     .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
@@ -77,22 +77,9 @@
     .scroll-arrow { width: 1px; height: 36px; background: linear-gradient(var(--accent), transparent); }
     @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(6px); } }
 
-    /* ─── SCROLL ANIMATION ─── */
-    .scroll-animation { height: 350vh; position: relative; z-index: 1; }
-    .scroll-sticky { position: sticky; top: 0; height: 100vh; width: 100%; overflow: hidden; }
-    #frameCanvas { position: absolute; top: 0; left: 0; }
-    @media (max-width: 1024px) { .scroll-animation { height: 300vh; } }
-    @media (max-width: 768px) { .scroll-animation { height: 250vh; } }
-
-    /* ─── ANNOTATION CARDS ─── */
-    .annotation-card { position: absolute; bottom: 8vh; left: 5vw; max-width: 340px; background: rgba(15,25,35,0.75); border: 1px solid rgba(201,168,76,0.15); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 20px; padding: 24px; opacity: 0; transform: translateY(20px); transition: opacity 0.4s ease, transform 0.4s ease; pointer-events: none; z-index: 10; }
-    .annotation-card.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
-    .card-number { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--accent); margin-bottom: 8px; letter-spacing: 1px; }
-    .card-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 6px; }
-    .card-desc { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 14px; }
-    .card-stat-number { font-size: 1.9rem; font-weight: 700; color: var(--accent); display: block; }
-    .card-stat-label { font-size: 0.75rem; color: var(--text-secondary); display: block; margin-top: 2px; }
-    @media (max-width: 768px) { .annotation-card { bottom: 2vh; left: 2vw; right: 2vw; max-width: none; padding: 12px 16px; display: flex; align-items: center; gap: 12px; } .card-desc, .card-stat { display: none; } .card-number { margin-bottom: 0; } }
+    /* ─── HERO VIDEO ─── */
+    #hero-video { position: relative; z-index: 1; background: var(--bg); }
+    #hero-video video { width: 100%; display: block; max-height: 80vh; object-fit: contain; }
 
     /* ─── SPECS ─── */
     #specs { position: relative; z-index: 1; }
@@ -130,10 +117,11 @@
 
     /* ─── TESTIMONIALS ─── */
     #testimonials { position: relative; z-index: 1; padding: 80px 0; }
-    .testimonials-track { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 20px 32px 40px; -webkit-overflow-scrolling: touch; scrollbar-width: none; cursor: grab; }
+    .testimonials-track { display: flex; align-items: stretch; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 20px 32px 40px; -webkit-overflow-scrolling: touch; scrollbar-width: none; cursor: grab; }
     .testimonials-track::-webkit-scrollbar { display: none; }
     .testimonials-track.dragging { cursor: grabbing; }
-    .testimonial-card { min-width: 340px; scroll-snap-align: start; background: var(--bg-card); border: 1px solid var(--border); backdrop-filter: blur(20px); border-radius: 20px; padding: 28px; flex-shrink: 0; }
+    .testimonial-card { min-width: 340px; scroll-snap-align: start; background: var(--bg-card); border: 1px solid var(--border); backdrop-filter: blur(20px); border-radius: 20px; padding: 28px; flex-shrink: 0; display: flex; flex-direction: column; }
+    .testimonial-text { flex: 1; }
     .testimonial-stars { color: var(--accent); font-size: 1rem; margin-bottom: 16px; letter-spacing: 2px; }
     .testimonial-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
     .testimonial-text::before { content: '"'; color: var(--accent); font-size: 1.2rem; }
@@ -145,7 +133,7 @@
     footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding: 56px 32px 36px; text-align: center; }
     .footer-inner { max-width: 900px; margin: 0 auto; }
     .footer-brand { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; }
-    .footer-brand svg { height: 28px; width: auto; opacity: 0.7; }
+    .footer-brand img { height: 28px; width: auto; opacity: 0.7; }
     .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 20px; }
     .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.875rem; transition: color 0.2s; }
     .footer-links a:hover { color: var(--text); }
@@ -163,7 +151,7 @@
 <!-- Loader -->
 <div id="loader">
   <div class="loader-logo">
-    <svg width="242" height="125" viewBox="0 0 242 125" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_1079_3232)"><path d="M42.2316 87.7401H34.179V85.5806H54.2211V87.7401H45.9895V108.26H42.2316V87.7401Z" fill="#FFFFFF"/><path d="M58.337 85.5806H65.8529C68.7161 85.5806 70.8634 86.1201 72.4739 87.3799C74.0844 88.6406 74.8002 90.2599 74.8002 92.4202C74.8002 94.5806 74.0844 96.2007 72.4739 97.4605C70.8634 98.7204 68.7161 99.2599 65.8529 99.2599H62.095V108.26H58.337V85.5806ZM65.8529 97.2804C67.4634 97.2804 68.716 96.9202 69.6107 96.0206C70.5055 95.1201 71.0424 94.0403 71.0424 92.4202C71.0424 90.8002 70.5055 89.7204 69.6107 88.8199C68.716 87.9202 67.4634 87.56 65.8529 87.56H62.095V97.2804H65.8529Z" fill="#FFFFFF"/><path d="M79.9893 85.5806H93.9469V87.56H83.9259V95.8405H91.0837V97.8199H83.9259V106.1H95.3784V108.08H80.1682V85.5806H79.9893Z" fill="#FFFFFF"/><path d="M101.667 85.5806H109.183C112.046 85.5806 114.193 86.1201 115.804 87.3799C117.414 88.6406 118.13 90.2599 118.13 92.4202C118.13 94.5806 117.414 96.2007 115.804 97.4605C114.193 98.7204 112.046 99.2599 109.183 99.2599H105.425V108.26H101.667V85.5806ZM109.183 97.2804C110.793 97.2804 112.046 96.9202 112.941 96.0206C113.835 95.1201 114.372 94.0403 114.372 92.4202C114.372 90.8002 113.835 89.7204 112.941 88.8199C112.046 87.9202 110.793 87.56 109.183 87.56H105.425V97.2804H109.183Z" fill="#FFFFFF"/></g><defs><clipPath id="clip0_1079_3232"><rect width="242" height="125" fill="white"/></clipPath></defs></svg>
+    <img src="assets/logo.svg" alt="Трембіта">
   </div>
   <p class="loader-text">Завантаження</p>
   <div class="loader-bar-track"><div class="loader-bar-fill" id="loaderBar"></div></div>
@@ -173,7 +161,7 @@
 <nav id="navbar">
   <div class="nav-inner">
     <a class="nav-logo" href="#">
-      <svg width="80" height="42" viewBox="0 0 242 125" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M42.2316 87.7401H34.179V85.5806H54.2211V87.7401H45.9895V108.26H42.2316V87.7401Z" fill="#FFFFFF"/><path d="M58.337 85.5806H65.8529C68.7161 85.5806 70.8634 86.1201 72.4739 87.3799C74.0844 88.6406 74.8002 90.2599 74.8002 92.4202C74.8002 94.5806 74.0844 96.2007 72.4739 97.4605C70.8634 98.7204 68.7161 99.2599 65.8529 99.2599H62.095V108.26H58.337V85.5806ZM65.8529 97.2804C67.4634 97.2804 68.716 96.9202 69.6107 96.0206C70.5055 95.1201 71.0424 94.0403 71.0424 92.4202C71.0424 90.8002 70.5055 89.7204 69.6107 88.8199C68.716 87.9202 67.4634 87.56 65.8529 87.56H62.095V97.2804H65.8529Z" fill="#FFFFFF"/><path d="M79.9893 85.5806H93.9469V87.56H83.9259V95.8405H91.0837V97.8199H83.9259V106.1H95.3784V108.08H80.1682V85.5806H79.9893Z" fill="#FFFFFF"/><path d="M101.667 85.5806H109.183C112.046 85.5806 114.193 86.1201 115.804 87.3799C117.414 88.6406 118.13 90.2599 118.13 92.4202C118.13 94.5806 117.414 96.2007 115.804 97.4605C114.193 98.7204 112.046 99.2599 109.183 99.2599H105.425V108.26H101.667V85.5806ZM109.183 97.2804C110.793 97.2804 112.046 96.9202 112.941 96.0206C113.835 95.1201 71.0424 94.0403 112.941 88.8199C112.046 87.9202 110.793 87.56 109.183 87.56H105.425V97.2804H109.183Z" fill="#FFFFFF"/></svg>
+      <img src="assets/logo.svg" alt="Трембіта">
       <span class="nav-logo-text">Трембіта</span>
     </a>
     <div class="nav-links">
@@ -207,59 +195,11 @@
   </div>
 </section>
 
-<!-- Scroll Animation -->
-<section class="scroll-animation">
-  <div class="scroll-sticky">
-    <canvas id="frameCanvas"></canvas>
-
-    <div class="annotation-card" data-show="0.08" data-hide="0.28">
-      <div class="card-number">01 — ФУНДАМЕНТ</div>
-      <div class="card-body">
-        <h3 class="card-title">Надійна основа</h3>
-        <p class="card-desc">Монолітне залізобетонне будівництво за сучасними нормами сейсмостійкості та енергоефективності.</p>
-        <div class="card-stat">
-          <span class="card-stat-number">20+</span>
-          <span class="card-stat-label">років досвіду</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="annotation-card" data-show="0.30" data-hide="0.50">
-      <div class="card-number">02 — КОМФОРТ</div>
-      <div class="card-body">
-        <h3 class="card-title">Тепло в кожній деталі</h3>
-        <p class="card-desc">Підлогове опалення, панорамні вікна з потрійним склінням, якісна вентиляція та ізоляція.</p>
-        <div class="card-stat">
-          <span class="card-stat-number">A++</span>
-          <span class="card-stat-label">клас енергоефективності</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="annotation-card" data-show="0.52" data-hide="0.72">
-      <div class="card-number">03 — ПРОСТІР</div>
-      <div class="card-body">
-        <h3 class="card-title">Для вашої родини</h3>
-        <p class="card-desc">Від затишної квартири до просторого приватного будинку — три формати житла під будь-яку сім'ю.</p>
-        <div class="card-stat">
-          <span class="card-stat-number">75–225</span>
-          <span class="card-stat-label">м² площі</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="annotation-card" data-show="0.74" data-hide="0.95">
-      <div class="card-number">04 — ЛОКАЦІЯ</div>
-      <div class="card-body">
-        <h3 class="card-title">Природа та місто поряд</h3>
-        <p class="card-desc">Ремeнів — зелений куточок поруч з Львовом. Ліс, чисте повітря та 15 хвилин до центру.</p>
-        <div class="card-stat">
-          <span class="card-stat-number">15 хв</span>
-          <span class="card-stat-label">до центру Львова</span>
-        </div>
-      </div>
-    </div>
-  </div>
+<!-- Hero Video -->
+<section id="hero-video">
+  <video autoplay loop muted playsinline>
+    <source src="assets/hero-animation.mp4" type="video/mp4">
+  </video>
 </section>
 
 <!-- Specs -->
@@ -370,7 +310,7 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">
-      <svg width="60" height="31" viewBox="0 0 242 125" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M42.2316 87.7401H34.179V85.5806H54.2211V87.7401H45.9895V108.26H42.2316V87.7401Z" fill="#FFFFFF"/><path d="M58.337 85.5806H65.8529C68.7161 85.5806 70.8634 86.1201 72.4739 87.3799C74.0844 88.6406 74.8002 90.2599 74.8002 92.4202C74.8002 94.5806 74.0844 96.2007 72.4739 97.4605C70.8634 98.7204 68.7161 99.2599 65.8529 99.2599H62.095V108.26H58.337V85.5806ZM65.8529 97.2804C67.4634 97.2804 68.716 96.9202 69.6107 96.0206C70.5055 95.1201 71.0424 94.0403 71.0424 92.4202C71.0424 90.8002 70.5055 89.7204 69.6107 88.8199C68.716 87.9202 67.4634 87.56 65.8529 87.56H62.095V97.2804H65.8529Z" fill="#FFFFFF"/><path d="M79.9893 85.5806H93.9469V87.56H83.9259V95.8405H91.0837V97.8199H83.9259V106.1H95.3784V108.08H80.1682V85.5806H79.9893Z" fill="#FFFFFF"/></svg>
+      <img src="assets/logo.svg" alt="Трембіта">
       <span style="font-family:'Space Grotesk',sans-serif;font-weight:600;color:rgba(255,255,255,0.7)">Будівельна компанія «Трембіта»</span>
     </div>
     <div class="footer-links">
@@ -445,110 +385,23 @@ window.addEventListener('scroll', () => {
   navbar.classList.toggle('nav-scrolled', window.scrollY > 80);
 }, { passive: true });
 
-// ─── FRAME SEQUENCE ───
-const FRAME_COUNT = 121;
-const frames = [];
-let loadedCount = 0;
-let currentFrame = -1;
-let ticking = false;
-const loaderBar = document.getElementById('loaderBar');
-const loader = document.getElementById('loader');
-const canvas = document.getElementById('frameCanvas');
-const ctx = canvas.getContext('2d');
-
-function resizeCanvas() {
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = window.innerWidth * dpr;
-  canvas.height = window.innerHeight * dpr;
-  canvas.style.width = window.innerWidth + 'px';
-  canvas.style.height = window.innerHeight + 'px';
-  if (currentFrame >= 0) drawFrame(currentFrame);
-}
-
-function drawFrame(index) {
-  const img = frames[index];
-  if (!img || !img.complete) return;
-  const dpr = window.devicePixelRatio || 1;
-  const cw = canvas.width, ch = canvas.height;
-  ctx.clearRect(0, 0, cw, ch);
-  const imgRatio = img.naturalWidth / img.naturalHeight;
-  const canvasRatio = cw / ch;
-  let dw, dh, dx, dy;
-  if (window.innerWidth > 768) {
-    if (canvasRatio > imgRatio) { dw = cw; dh = cw / imgRatio; }
-    else { dh = ch; dw = ch * imgRatio; }
-  } else {
-    const z = 1.2;
-    if (canvasRatio > imgRatio) { dh = ch * z; dw = dh * imgRatio; }
-    else { dw = cw * z; dh = dw / imgRatio; }
-  }
-  dx = (cw - dw) / 2; dy = (ch - dh) / 2;
-  ctx.drawImage(img, dx, dy, dw, dh);
-}
-
-function onAllFramesLoaded() {
-  loader.style.opacity = '0';
-  setTimeout(() => { loader.style.display = 'none'; }, 600);
-  drawFrame(0);
-}
-
-for (let i = 1; i <= FRAME_COUNT; i++) {
-  const img = new Image();
-  img.src = `frames/frame_${String(i).padStart(4,'0')}.jpg`;
-  img.onload = () => {
-    loadedCount++;
-    loaderBar.style.width = (loadedCount / FRAME_COUNT * 100) + '%';
-    if (loadedCount === FRAME_COUNT) onAllFramesLoaded();
-  };
-  img.onerror = () => {
-    loadedCount++;
-    if (loadedCount === FRAME_COUNT) onAllFramesLoaded();
-  };
-  frames.push(img);
-}
-
-// ─── ANNOTATION CARDS + SNAP-STOP ───
-const cards = document.querySelectorAll('.annotation-card');
-const SNAP_ZONES = Array.from(cards).map(c => ({
-  show: parseFloat(c.dataset.show),
-  hide: parseFloat(c.dataset.hide),
-  snapped: false
-}));
-let isSnapping = false;
-
-function updateCards(progress) {
-  cards.forEach((card, i) => {
-    const z = SNAP_ZONES[i];
-    const visible = progress >= z.show && progress <= z.hide;
-    card.classList.toggle('visible', visible);
-    if (visible && !z.snapped && !isSnapping) {
-      z.snapped = true; isSnapping = true;
-      document.body.style.overflow = 'hidden';
-      setTimeout(() => { document.body.style.overflow = ''; isSnapping = false; }, 600);
+// ─── LOADER ───
+(function() {
+  const loaderBar = document.getElementById('loaderBar');
+  const loader = document.getElementById('loader');
+  let pct = 0;
+  const interval = setInterval(() => {
+    pct = Math.min(pct + 14, 100);
+    loaderBar.style.width = pct + '%';
+    if (pct >= 100) {
+      clearInterval(interval);
+      setTimeout(() => {
+        loader.style.opacity = '0';
+        setTimeout(() => { loader.style.display = 'none'; }, 600);
+      }, 150);
     }
-    if (!visible) z.snapped = false;
-  });
-}
-
-// ─── SCROLL HANDLER ───
-window.addEventListener('scroll', () => {
-  if (!ticking) {
-    requestAnimationFrame(() => {
-      const section = document.querySelector('.scroll-animation');
-      const rect = section.getBoundingClientRect();
-      const scrollable = section.offsetHeight - window.innerHeight;
-      const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
-      const fi = Math.min(FRAME_COUNT - 1, Math.floor(progress * FRAME_COUNT));
-      if (fi !== currentFrame) { currentFrame = fi; drawFrame(fi); }
-      updateCards(progress);
-      ticking = false;
-    });
-    ticking = true;
-  }
-}, { passive: true });
-
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
+  }, 70);
+})();
 
 // ─── SPECS COUNT-UP ───
 function easeOutExpo(t) { return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
