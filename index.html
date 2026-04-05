@@ -77,9 +77,35 @@
     .scroll-arrow { width: 1px; height: 36px; background: linear-gradient(var(--accent), transparent); }
     @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(6px); } }
 
-    /* ─── HERO VIDEO ─── */
-    #hero-video { position: relative; z-index: 1; background: var(--bg); }
-    #hero-video video { width: 100%; display: block; max-height: 80vh; object-fit: contain; }
+    /* ─── INVESTOR SECTION ─── */
+    #investor { position: relative; z-index: 1; padding: 80px 32px 100px; }
+    .investor-inner { max-width: 860px; margin: 0 auto; text-align: center; }
+    .investor-badge { display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent); background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 100px; padding: 6px 16px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+    .investor-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.6rem,3.5vw,2.4rem); font-weight: 700; margin-bottom: 8px; }
+    .investor-subtitle { color: var(--text-secondary); font-size: 1rem; margin-bottom: 40px; }
+    .investor-player { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; cursor: pointer; border: 1px solid rgba(201,168,76,0.18); box-shadow: 0 0 80px rgba(201,168,76,0.07), 0 24px 60px rgba(0,0,0,0.4); }
+    .investor-poster { position: absolute; inset: 0; background: linear-gradient(135deg, #0a1520 0%, #111e2d 40%, #0d1a28 70%, #0a1218 100%); transition: opacity 0.4s ease; }
+    .investor-poster-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(201,168,76,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.04) 1px,transparent 1px); background-size: 40px 40px; }
+    .investor-poster-lines { position: absolute; inset: 0; overflow: hidden; }
+    .investor-poster-lines::before { content:''; position: absolute; top: 30%; left: -10%; width: 120%; height: 1px; background: linear-gradient(90deg,transparent,rgba(201,168,76,0.15),transparent); transform: rotate(-8deg); }
+    .investor-poster-lines::after { content:''; position: absolute; top: 65%; left: -10%; width: 120%; height: 1px; background: linear-gradient(90deg,transparent,rgba(201,168,76,0.1),transparent); transform: rotate(-8deg); }
+    .investor-name-plate { position: absolute; bottom: 0; left: 0; right: 0; padding: 40px 28px 24px; background: linear-gradient(transparent, rgba(8,14,22,0.95)); text-align: left; }
+    .investor-name-plate strong { font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 700; display: block; }
+    .investor-name-plate span { font-size: 0.82rem; color: var(--text-secondary); display: block; margin-top: 3px; }
+    .investor-name-plate .flags { font-size: 1rem; margin-top: 6px; display: block; }
+    .investor-quote { position: absolute; top: 24px; left: 28px; right: 28px; font-size: 1.05rem; line-height: 1.55; color: rgba(255,255,255,0.82); font-style: italic; text-align: left; }
+    .investor-quote::before { content: '"'; color: var(--accent); font-size: 2.5rem; line-height: 0; vertical-align: -0.6rem; margin-right: 4px; font-style: normal; }
+    .investor-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 80px; height: 80px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform 0.25s ease, box-shadow 0.25s ease; box-shadow: 0 0 0 0 rgba(201,168,76,0.4); }
+    .investor-player:hover .investor-play { transform: translate(-50%,-50%) scale(1.1); box-shadow: 0 0 0 16px rgba(201,168,76,0.15), 0 0 40px rgba(201,168,76,0.3); }
+    .investor-play svg { fill: #000; width: 28px; height: 28px; margin-left: 4px; }
+    video#investorVideo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.4s ease; }
+    video#investorVideo.playing { opacity: 1; }
+    .investor-player.playing .investor-poster,
+    .investor-player.playing .investor-play { opacity: 0; pointer-events: none; }
+    .investor-chips { display: flex; justify-content: center; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+    .investor-chip { background: var(--bg-card); border: 1px solid var(--border); border-radius: 100px; padding: 8px 18px; font-size: 0.82rem; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
+    .investor-chip strong { color: var(--accent); font-weight: 600; }
+    @media (max-width: 768px) { #investor { padding: 60px 16px 80px; } .investor-quote { font-size: 0.9rem; top: 16px; left: 16px; right: 16px; } .investor-name-plate { padding: 30px 16px 16px; } .investor-play { width: 64px; height: 64px; } .investor-play svg { width: 22px; height: 22px; } }
 
     /* ─── SPECS ─── */
     #specs { position: relative; z-index: 1; }
@@ -195,11 +221,37 @@
   </div>
 </section>
 
-<!-- Hero Video -->
-<section id="hero-video">
-  <video autoplay loop muted playsinline>
-    <source src="assets/hero-animation.mp4" type="video/mp4">
-  </video>
+<!-- Investor Appeal -->
+<section id="investor">
+  <div class="investor-inner">
+    <div class="investor-badge">🇺🇸 Звернення засновника</div>
+    <h2 class="investor-title">Чому ми вкладаємо в Україну</h2>
+    <p class="investor-subtitle">Слово генерального інвестора групи компаній «Трембіта»</p>
+    <div class="investor-player" id="investorPlayer">
+      <video id="investorVideo" preload="none">
+        <source src="assets/investor.mp4" type="video/mp4">
+      </video>
+      <div class="investor-poster">
+        <div class="investor-poster-grid"></div>
+        <div class="investor-poster-lines"></div>
+        <p class="investor-quote">Ми — українці, які виросли у Нью-Йорку. Але серце завжди тягло додому. І ми повернулись — з технологіями, досвідом і чіткою місією.</p>
+        <div class="investor-name-plate">
+          <strong>James Kovalenko</strong>
+          <span>Генеральний інвестор · Група компаній «Трембіта»</span>
+          <span class="flags">🇺🇸 Нью-Йорк → 🇺🇦 Ременів</span>
+        </div>
+      </div>
+      <div class="investor-play" id="investorPlayBtn">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+    </div>
+    <div class="investor-chips">
+      <div class="investor-chip">💰 Від <strong>$500/м²</strong></div>
+      <div class="investor-chip">📍 <strong>14 км</strong> від Львова</div>
+      <div class="investor-chip">🏗 Власне виробництво матеріалів</div>
+      <div class="investor-chip">🏆 Преміум якість</div>
+    </div>
+  </div>
 </section>
 
 <!-- Specs -->
@@ -432,6 +484,24 @@ const specObserver = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.3 });
 specObserver.observe(document.getElementById('specs'));
+
+// ─── INVESTOR PLAYER ───
+(function() {
+  const player = document.getElementById('investorPlayer');
+  const video = document.getElementById('investorVideo');
+  const playBtn = document.getElementById('investorPlayBtn');
+  function startPlay() {
+    player.classList.add('playing');
+    video.classList.add('playing');
+    video.play();
+  }
+  playBtn.addEventListener('click', startPlay);
+  player.addEventListener('click', e => {
+    if (player.classList.contains('playing')) {
+      video.paused ? video.play() : video.pause();
+    }
+  });
+})();
 
 // ─── TESTIMONIALS DRAG ───
 const track = document.getElementById('testimonialsTrack');
