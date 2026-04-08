@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neuronix × БК Трембіта — Цифровий прорив</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --navy: #0d1b2a;
+    --navy2: #1b2d45;
+    --gold: #c9a84c;
+    --gold2: #e8c46a;
+    --white: #f0f4f8;
+    --muted: #8a9bb0;
+    --red: #e05252;
+    --green: #3ec97e;
+    --slide-h: 100vh;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    overflow: hidden;
+  }
+
+  /* ─── NAV ─── */
+  .nav {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: .6rem;
+    z-index: 100;
+  }
+  .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.2);
+    cursor: pointer;
+    transition: background .3s, transform .3s;
+  }
+  .dot.active { background: var(--gold); transform: scale(1.3); }
+
+  .arrows {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 100;
+  }
+  .arr-left, .arr-right {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: all;
+  }
+  .arr-left  { left:  1.2rem; }
+  .arr-right { right: 1.2rem; }
+  .arr {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.1);
+    border: 1.5px solid rgba(255,255,255,.2);
+    color: var(--white);
+    font-size: 1.6rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s, transform .15s, border-color .2s;
+    box-shadow: 0 4px 20px rgba(0,0,0,.3);
+  }
+  .arr:hover {
+    background: var(--gold);
+    color: var(--navy);
+    border-color: var(--gold);
+    transform: scale(1.1);
+  }
+
+  .slide-counter {
+    position: fixed;
+    top: 1.5rem;
+    right: 2rem;
+    font-size: .8rem;
+    color: var(--muted);
+    z-index: 100;
+    letter-spacing: .1em;
+  }
+
+  /* ─── SLIDES ─── */
+  .slides { height: 100vh; overflow: hidden; }
+  .slide {
+    height: 100vh;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 5%;
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn .4s ease;
+  }
+  .slide.active { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,76,0); transform: scale(1); }
+    50%       { box-shadow: 0 0 22px 6px rgba(201,168,76,.45); transform: scale(1.03); }
+  }
+  .pulse-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
+    background: linear-gradient(135deg, rgba(201,168,76,.18), rgba(201,168,76,.08));
+    border: 1.5px solid var(--gold);
+    border-radius: 12px;
+    padding: .75rem 1.6rem;
+    color: var(--gold2);
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: .03em;
+    animation: pulseGlow 2.2s ease-in-out infinite;
+    transition: background .2s;
+  }
+  .pulse-btn:hover {
+    background: rgba(201,168,76,.28);
+    animation: none;
+    transform: scale(1.04);
+  }
+
+  /* ─── BG DECO ─── */
+  .deco {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    opacity: .15;
+  }
+  .deco-1 { width: 500px; height: 500px; background: var(--gold); top: -150px; right: -150px; }
+  .deco-2 { width: 400px; height: 400px; background: #2a5caa; bottom: -100px; left: -100px; }
+
+  /* ─── LOGO BADGE ─── */
+  .logo-badge {
+    position: fixed;
+    top: 1.5rem;
+    left: 2rem;
+    font-size: .9rem;
+    font-weight: 700;
+    letter-spacing: .05em;
+    color: var(--gold);
+    z-index: 100;
+  }
+  .logo-badge span { color: var(--muted); font-weight: 400; }
+
+  /* ─── TYPOGRAPHY ─── */
+  .eyebrow {
+    font-size: .75rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: .8rem;
+    font-weight: 600;
+  }
+  h1 { font-size: clamp(2rem, 5vw, 3.8rem); font-weight: 800; line-height: 1.1; }
+  h2 { font-size: clamp(1.6rem, 4vw, 2.6rem); font-weight: 700; line-height: 1.2; }
+  h3 { font-size: 1.2rem; font-weight: 700; }
+  p  { color: #bfcfdf; line-height: 1.7; }
+  .accent { color: var(--gold); }
+
+  .subtitle {
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    color: #bfcfdf;
+    margin-top: 1.2rem;
+    max-width: 650px;
+    line-height: 1.6;
+  }
+
+  /* ─── CARDS ─── */
+  .cards {
+    display: grid;
+    gap: 1.2rem;
+    width: 100%;
+    max-width: 1100px;
+  }
+  .cards-3 { grid-template-columns: repeat(3, 1fr); }
+  .cards-2 { grid-template-columns: repeat(2, 1fr); }
+  .cards-4 { grid-template-columns: repeat(4, 1fr); }
+
+  .card {
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px;
+    padding: 1.6rem;
+    transition: border-color .2s;
+  }
+  .card:hover { border-color: rgba(201,168,76,.3); }
+  .card .icon { font-size: 2rem; margin-bottom: .8rem; }
+  .card h3 { margin-bottom: .5rem; }
+  .card p { font-size: .9rem; }
+
+  .card-bad  { border-color: rgba(224,82,82,.3);  background: rgba(224,82,82,.05); }
+  .card-good { border-color: rgba(62,201,126,.3); background: rgba(62,201,126,.05); }
+  .card-gold { border-color: rgba(201,168,76,.4); background: rgba(201,168,76,.07); }
+
+  /* ─── TAG ─── */
+  .tag {
+    display: inline-block;
+    padding: .25rem .75rem;
+    border-radius: 99px;
+    font-size: .75rem;
+    font-weight: 600;
+    margin: .2rem .2rem 0 0;
+  }
+  .tag-red   { background: rgba(224,82,82,.15);   color: #f08080; border: 1px solid rgba(224,82,82,.3); }
+  .tag-green { background: rgba(62,201,126,.15);  color: #5ee89a; border: 1px solid rgba(62,201,126,.3); }
+  .tag-gold  { background: rgba(201,168,76,.15);  color: var(--gold2); border: 1px solid rgba(201,168,76,.3); }
+  .tag-blue  { background: rgba(80,140,220,.15);  color: #80b0f0; border: 1px solid rgba(80,140,220,.3); }
+
+  /* ─── TABLE ─── */
+  .comp-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+  .comp-table th {
+    padding: .7rem 1rem;
+    text-align: left;
+    background: rgba(255,255,255,.05);
+    color: var(--gold);
+    font-size: .75rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .comp-table td {
+    padding: .65rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,.05);
+    color: #bfcfdf;
+  }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table .trembita td { background: rgba(201,168,76,.07); color: var(--white); font-weight: 600; }
+  .check  { color: var(--green); font-size: 1.1rem; }
+  .cross  { color: var(--red);   font-size: 1.1rem; }
+  .maybe  { color: #f0b840;       font-size: 1rem; }
+
+  /* ─── STAT ─── */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    width: 100%; max-width: 900px;
+  }
+  .stat-box {
+    text-align: center;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 14px;
+    padding: 1.4rem 1rem;
+  }
+  .stat-num { font-size: 2.4rem; font-weight: 800; color: var(--gold); }
+  .stat-label { font-size: .8rem; color: var(--muted); margin-top: .3rem; }
+
+  /* ─── FUNNEL ─── */
+  .funnel { display: flex; flex-direction: column; align-items: center; gap: .4rem; width: 100%; max-width: 500px; }
+  .funnel-step {
+    width: 100%;
+    padding: .9rem 1.5rem;
+    background: rgba(255,255,255,.06);
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: .95rem;
+    border: 1px solid rgba(255,255,255,.07);
+    transition: max-width .3s;
+  }
+  .funnel-step:nth-child(1) { max-width: 100%; border-color: rgba(80,140,220,.4); }
+  .funnel-step:nth-child(2) { max-width: 88%; border-color: rgba(201,168,76,.3); }
+  .funnel-step:nth-child(3) { max-width: 72%; border-color: rgba(201,168,76,.4); }
+  .funnel-step:nth-child(4) { max-width: 56%; border-color: rgba(62,201,126,.5); background: rgba(62,201,126,.07); }
+  .funnel-arrow { color: var(--muted); font-size: 1.2rem; text-align: center; }
+  .funnel-num { font-size: 1.3rem; font-weight: 800; color: var(--gold); }
+
+  /* ─── SITE CONCEPT ─── */
+  .wireframe {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 16px;
+    padding: 1.2rem;
+    width: 100%;
+    max-width: 920px;
+    font-size: .82rem;
+  }
+  .wf-section {
+    border: 1px dashed rgba(201,168,76,.3);
+    border-radius: 8px;
+    padding: .5rem .8rem;
+    margin-bottom: .5rem;
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+  }
+  .wf-label { color: var(--gold); font-weight: 700; min-width: 120px; }
+  .wf-desc  { color: var(--muted); flex: 1; }
+  .wf-cta   { color: var(--green); font-weight: 600; font-size: .75rem; }
+
+  /* ─── COMPARISON ─── */
+  .vs-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1.5rem;
+    align-items: center;
+    width: 100%;
+    max-width: 900px;
+  }
+  .vs-label {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--muted);
+    text-align: center;
+  }
+  .vs-col { display: flex; flex-direction: column; gap: .6rem; }
+  .vs-row {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    font-size: .88rem;
+    padding: .5rem .8rem;
+    border-radius: 8px;
+  }
+  .vs-bad  { background: rgba(224,82,82,.08); color: #f08080; }
+  .vs-good { background: rgba(62,201,126,.08); color: #5ee89a; }
+  .vs-title {
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: .8rem;
+    border-radius: 10px;
+    margin-bottom: .3rem;
+  }
+  .vs-title-bad  { background: rgba(224,82,82,.12);  color: #f08080; }
+  .vs-title-good { background: rgba(62,201,126,.12); color: #5ee89a; }
+
+  /* ─── CTA SLIDE ─── */
+  .cta-box {
+    background: linear-gradient(135deg, rgba(201,168,76,.15), rgba(62,201,126,.08));
+    border: 1px solid rgba(201,168,76,.3);
+    border-radius: 20px;
+    padding: 2.5rem 3rem;
+    text-align: center;
+    max-width: 700px;
+  }
+  .steps {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    justify-content: center;
+  }
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+  }
+  .step-num {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 800;
+    font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-text { font-size: .85rem; color: var(--muted); text-align: center; max-width: 100px; }
+
+  /* ─── COVER ─── */
+  .cover-content { text-align: center; z-index: 1; }
+  .cover-badge {
+    display: inline-block;
+    background: rgba(201,168,76,.12);
+    border: 1px solid rgba(201,168,76,.3);
+    border-radius: 99px;
+    padding: .4rem 1.2rem;
+    font-size: .78rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+  .cover-client {
+    font-size: clamp(.9rem, 2vw, 1.1rem);
+    color: var(--muted);
+    margin-top: 1.5rem;
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(to right, var(--gold), var(--gold2));
+    z-index: 200;
+    transition: width .3s;
+  }
+
+  /* ─── PROBLEM SLIDE ─── */
+  .problem-big {
+    font-size: clamp(3rem, 10vw, 7rem);
+    font-weight: 900;
+    color: var(--red);
+    line-height: 1;
+  }
+
+  /* ─── CHANNEL CARDS ─── */
+  .channel-card {
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px;
+    padding: 1.5rem;
+  }
+  .channel-card h3 { color: var(--gold); margin-bottom: .8rem; font-size: 1rem; }
+  .channel-card ul { list-style: none; display: flex; flex-direction: column; gap: .4rem; }
+  .channel-card li { font-size: .85rem; color: #bfcfdf; padding-left: 1rem; position: relative; }
+  .channel-card li::before { content: "→"; position: absolute; left: 0; color: var(--gold); }
+
+  @media (max-width: 768px) {
+    /* Grid */
+    .cards-3, .cards-4 { grid-template-columns: 1fr; }
+    .cards-2            { grid-template-columns: 1fr; }
+    .stat-grid          { grid-template-columns: repeat(2, 1fr); }
+    .vs-grid            { grid-template-columns: 1fr; }
+    .vs-label           { display: none; }
+
+    /* Typography */
+    h1 { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+    h2 { font-size: clamp(1.3rem, 5vw, 1.8rem); }
+    .subtitle  { font-size: .95rem; }
+    .stat-num  { font-size: 1.8rem; }
+    .problem-big { font-size: clamp(2.5rem, 18vw, 5rem); }
+
+    /* Slide layout — allow scroll for tall content */
+    .slide {
+      padding: 4.5rem 4% 5rem;
+      justify-content: flex-start;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    /* Navigation arrows */
+    .arr       { width: 38px; height: 38px; font-size: .95rem; }
+    .arr-left  { left: .3rem; }
+    .arr-right { right: .3rem; }
+
+    /* Dot nav */
+    .nav { bottom: .6rem; gap: .4rem; }
+    .dot { width: 7px; height: 7px; }
+
+    /* Header elements */
+    .logo-badge    { font-size: .7rem; left: .8rem; top: .9rem; }
+    .slide-counter { font-size: .65rem; right: .8rem; top: .9rem; }
+
+    /* BG deco — scale down so it doesn't eat layout */
+    .deco-1 { width: 180px; height: 180px; top: -60px; right: -60px; }
+    .deco-2 { width: 160px; height: 160px; bottom: -40px; left: -40px; }
+
+    /* CTA slide steps — wrap horizontally */
+    .steps       { flex-wrap: wrap; gap: .8rem; margin-top: 1rem; }
+    .step-text   { max-width: 80px; }
+    .cta-box     { padding: 1.4rem 1rem; }
+
+    /* Funnel — disable shrinking percentages on mobile */
+    .funnel-step:nth-child(2),
+    .funnel-step:nth-child(3),
+    .funnel-step:nth-child(4) { max-width: 100%; }
+
+    /* Wireframe labels */
+    .wf-label { min-width: 70px; font-size: .72rem; }
+    .wf-desc  { font-size: .72rem; }
+    .wf-cta   { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="logo-badge">Neuronix <span>× БК Трембіта</span></div>
+<div class="slide-counter" id="slideCounter">1 / 10</div>
+
+<!-- NAVIGATION -->
+<div class="arrows">
+  <button class="arr arr-left"  onclick="changeSlide(-1)">◀</button>
+  <button class="arr arr-right" onclick="changeSlide(1)">▶</button>
+</div>
+<div class="nav" id="navDots"></div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  SLIDE 1 — COVER                          -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slides">
+<div class="slide active" id="slide-1">
+  <div class="deco deco-1"></div>
+  <div class="deco deco-2"></div>
+  <div class="cover-content">
+    <div class="cover-badge">🏗 Комерційна пропозиція</div>
+    <h1>Цифровий старт<br><span class="accent">БК Трембіта</span></h1>
+    <p class="subtitle">
+      Лендінг-магніт + SEO + контекстна реклама —<br>
+      системний потік клієнтів із першого місяця
+    </p>
+    <div class="cover-client">
+      Підготовлено для <strong>Миколи</strong> · Квітень 2026
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  SLIDE 2 — СИТУАЦІЯ ЗАРАЗ                 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-2">
+  <div class="deco deco-1"></div>
+  <div class="eyebrow">Поточна ситуація</div>
+  <h2 style="margin-bottom:2rem">Де зараз <span class="accent">БК Трембіта</span></h2>
+
+  <div class="stat-grid">
+    <div class="stat-box">
+      <div class="stat-num">2006</div>
+      <div class="stat-label">Рік заснування</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Активних проєкти</div>
+    </div>
+    <div class="stat-box" style="border-color:rgba(224,82,82,.4)">
+      <div class="stat-num" style="color:var(--red)">❌</div>
+      <div class="stat-label">Власний сайт</div>
+    </div>
+    <div class="stat-box" style="border-color:rgba(224,82,82,.3)">
+      <div class="stat-num" style="color:var(--red); font-size:1.8rem">3.1 ★</div>
+      <div class="stat-label">86 відгуків на агрегаторах</div>
+    </div>
+  </div>
+
+  <div style="margin-top:2rem; max-width:900px; width:100%">
+    <div class="cards cards-3">
+      <div class="card card-gold">
+        <div class="icon">🏡</div>
+        <h3>«Континент» — Ременів</h3>
+        <p style="margin-bottom:.8rem">Квартири + таунхауси + приватні будинки</p>
+        <span class="tag tag-gold">від 2 640 000 грн</span>
+        <span class="tag tag-blue">Активно будується</span>
+      </div>
+      <div class="card">
+        <div class="icon">🏗</div>
+        <h3>ЖК Lemberg</h3>
+        <p>Львів / приміська зона</p>
+        <span class="tag tag-blue" style="margin-top:.8rem">В портфелі</span>
+      </div>
+      <div class="card">
+        <div class="icon">🌿</div>
+        <h3>ЖК «Подих Природи»</h3>
+        <p>Львівська область</p>
+        <span class="tag tag-blue" style="margin-top:.8rem">В портфелі</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  SLIDE 3 — ПРОБЛЕМА                       -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-3">
+  <div class="deco deco-2"></div>
+  <div class="eyebrow">Проблема</div>
+  <h2 style="margin-bottom:1rem">Скільки клієнтів ви <span style="color:var(--red)">втрачаєте</span> зараз?</h2>
+
+  <div style="display:flex; align-items:center; gap:3rem; flex-wrap:wrap; justify-content:center; width:100%; max-width:900px">
+    <div style="text-align:center">
+      <div class="problem-big">70%</div>
+      <p style="margin-top:.5rem">покупців нерухомості<br>шукають будинок <strong>онлайн</strong></p>
+    </div>
+    <div style="flex:1; min-width:300px; display:flex; flex-direction:column; gap:.8rem">
+      <div class="card card-bad">
+        <b style="color:#f08080">Без сайту</b> — ваша компанія невидима в Google
+      </div>
+      <div class="card card-bad">
+        Конкуренти <b style="color:#f08080">перехоплюють</b> ваших потенційних покупців
+      </div>
+      <div class="card card-bad">
+        Рейтинг 3.1★ без <b style="color:#f08080">можливості відповісти</b> — шкодить репутації
+      </div>
+      <div class="card card-bad">
+        Пошуковий запит «будинок Ременів» → <b style="color:#f08080">вас немає</b> в результатах
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-gold" style="max-width:700px; margin-top:1.5rem; text-align:center">
+    <b style="color:var(--gold2)">Конкурентна перевага яку легко закрити:</b><br>
+    <span style="color:#bfcfdf">budedim.ua продає від $85K, ви — від ~$64K. Але клієнт про вас не знає.</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  SLIDE 4 — КОНКУРЕНТИ                     -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-4">
+  <div class="deco deco-1"></div>
+  <div class="eyebrow">Ринок</div>
+  <h2 style="margin-bottom:1.5rem">Що роблять <span class="accent">конкуренти</span></h2>
+
+  <div style="width:100%; max-width:950px; overflow-x:auto">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Компанія</th>
+          <th>Сайт</th>
+          <th>Карта</th>
+          <th>Ціни online</th>
+          <th>єОселя</th>
+          <th>Хід будів.</th>
+          <th>Онлайн заявка</th>
+          <th>Рівень</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>budedim.ua</b></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td>⭐⭐⭐⭐⭐</td>
+        </tr>
+        <tr>
+          <td><b>novemisto.com</b></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="cross">✗</span></td>
+          <td>⭐⭐⭐</td>
+        </tr>
+        <tr>
+          <td><b>misto-comfortu.com</b></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="cross">✗</span></td>
+          <td>⭐⭐⭐⭐</td>
+        </tr>
+        <tr class="trembita">
+          <td>🏗 <b>БК Трембіта (зараз)</b></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="maybe">?</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td>—</td>
+        </tr>
+        <tr class="trembita" style="background:rgba(62,201,126,.07)!important">
+          <td>🚀 <b>БК Трембіта (після нас)</b></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+          <td style="color:var(--green)">⭐⭐⭐⭐⭐</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  SLIDE 5 — ЧОМУ НЕ OPENCART               -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-5">
+  <div class="deco deco-2"></div>
+  <div class="eyebrow">Критично важливо</div>
+  <h2 style="margin-bottom:1.5rem">Чому <span style="color:var(--red)">OpenCart — помилка</span><br>для будівельної компанії</h2>
+
+  <div class="vs-grid">
+    <div class="vs-col">
+      <div class="vs-title vs-title-bad">🛒 OpenCart</div>
+      <div class="vs-row vs-bad">✗ Платформа для <b>магазинів</b> — кошики, SKU, каталоги</div>
+      <div class="vs-row vs-bad">✗ Важкий, повільний — мінус позиції в Google</div>
+      <div class="vs-row vs-bad">✗ Потрібні платні модулі для кожної функції</div>
+      <div class="vs-row vs-bad">✗ Стандартний вигляд — клієнт «бачить шаблон»</div>
+      <div class="vs-row vs-bad">✗ Складна SEO-оптимізація через архітектуру</div>
+      <div class="vs-row vs-bad">✗ Постійні оновлення, безпека, хостинг</div>
+      <div class="vs-row vs-bad">✗ Немає емоційного впливу — нерухомість купують серцем</div>
+    </div>
+    <div class="vs-label">VS</div>
+    <div class="vs-col">
+      <div class="vs-title vs-title-good">🎯 Лендінг-магніт</div>
+      <div class="vs-row vs-good">✓ Єдина мета: <b>захопити контакт</b> потенційного покупця</div>
+      <div class="vs-row vs-good">✓ Швидкий, легкий — PageSpeed 90+ = кращі позиції</div>
+      <div class="vs-row vs-good">✓ Все включено з нуля під ваш бренд</div>
+      <div class="vs-row vs-good">✓ Унікальний дизайн = «вони серйозні»</div>
+      <div class="vs-row vs-good">✓ SEO-оптимізований з першого рядка коду</div>
+      <div class="vs-row vs-good">✓ Статичний або JAMstack — майже нульова підтримка</div>
+      <div class="vs-row vs-good">✓ Сторітелінг + великі фото + відео = продажна емоція</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  SLIDE 6 — КОНЦЕПЦІЯ САЙТУ               -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-6">
+  <div class="deco deco-1"></div>
+  <div class="eyebrow">Наша концепція</div>
+  <h2 style="margin-bottom:1.2rem">Як <span class="accent">виглядатиме</span> ваш сайт</h2>
+
+  <div class="wireframe">
+    <div class="wf-section" style="border-color:rgba(201,168,76,.6); background:rgba(201,168,76,.05)">
+      <div class="wf-label">🖼 HERO</div>
+      <div class="wf-desc">Повноекранне фото/відео з Ременова + заголовок «Ваш будинок у Ременові» + форма «Отримати каталог та ціни»</div>
+      <div class="wf-cta">← ГОЛОВНИЙ ЛІДМАГНІТ</div>
+    </div>
+    <div class="wf-section">
+      <div class="wf-label">📌 ЧОМУ МИ</div>
+      <div class="wf-desc">3 унікальні переваги: 20 років на ринку · 3 формати житла в одному містечку · ціна від 2.64M грн · підтримка єОселя</div>
+    </div>
+    <div class="wf-section">
+      <div class="wf-label">🏡 ПРОЄКТИ</div>
+      <div class="wf-desc">Картки: Континент / Lemberg / Подих Природи — фото, площа, ціна, статус, кнопка «Дізнатись більше»</div>
+    </div>
+    <div class="wf-section">
+      <div class="wf-label">📷 ХІД БУДІВНИЦТВА</div>
+      <div class="wf-desc">Фотогалерея + дата оновлення — будує довіру, покращує SEO (свіжий контент)</div>
+    </div>
+    <div class="wf-section">
+      <div class="wf-label">💳 ЯК КУПИТИ</div>
+      <div class="wf-desc">3 кроки: Консультація → Договір → Ключі · Блок єОселя · Розтермінування</div>
+    </div>
+    <div class="wf-section" style="border-color:rgba(62,201,126,.4); background:rgba(62,201,126,.04)">
+      <div class="wf-label">📞 КОНТАКТИ + CTA</div>
+      <div class="wf-desc">Форма заявки · Телефони · Карта Ременова · Посилання на соц.мережі</div>
+      <div class="wf-cta">← КОНВЕРСІЯ</div>
+    </div>
+  </div>
+
+  <p style="margin-top:1rem; font-size:.85rem; color:var(--muted)">
+    Натхнення: структура budedim.ua + естетика преміум нерухомості · Адаптивний під мобільні · Час завантаження &lt;2 сек
+  </p>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  SLIDE 7 — ДЕМО САЙТУ                    -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-7">
+  <div class="deco deco-1"></div>
+  <div class="eyebrow">Живий прототип</div>
+  <h2 style="margin-bottom:1.2rem">Ось як буде виглядати <span class="accent">ваш сайт</span></h2>
+
+  <div style="display:flex; gap:2rem; align-items:flex-start; width:100%; max-width:1080px">
+
+    <!-- Browser mockup -->
+    <div style="flex:1.1; min-width:0">
+      <div style="background:#1a2a3a; border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.1); box-shadow:0 20px 60px rgba(0,0,0,.5)">
+        <!-- Browser chrome -->
+        <div style="background:#0d1b2a; padding:.55rem 1rem; display:flex; align-items:center; gap:.7rem; border-bottom:1px solid rgba(255,255,255,.08)">
+          <div style="display:flex; gap:.4rem">
+            <span style="width:10px;height:10px;border-radius:50%;background:#e05252;display:block"></span>
+            <span style="width:10px;height:10px;border-radius:50%;background:#f0b840;display:block"></span>
+            <span style="width:10px;height:10px;border-radius:50%;background:#3ec97e;display:block"></span>
+          </div>
+          <div style="flex:1; background:rgba(255,255,255,.06); border-radius:6px; padding:.25rem .8rem; font-size:.72rem; color:var(--muted); display:flex; align-items:center; gap:.5rem">
+            <span style="color:var(--green)">🔒</span> trembita-website.vercel.app
+          </div>
+        </div>
+        <!-- Iframe -->
+        <iframe
+          src="https://trembita-website.vercel.app/"
+          style="width:100%; height:340px; border:none; display:block;"
+          loading="lazy"
+          title="Прототип сайту БК Трембіта"
+        ></iframe>
+      </div>
+      <div style="margin-top:.9rem; text-align:center">
+        <a href="https://trembita-website.vercel.app/" target="_blank" class="pulse-btn">
+          <span style="font-size:1.15rem">↗</span> Відкрити сайт повноекранно
+        </a>
+      </div>
+    </div>
+
+    <!-- Benefits -->
+    <div style="flex:.9; display:flex; flex-direction:column; gap:.7rem; min-width:0">
+      <div class="card card-gold" style="padding:1rem 1.2rem">
+        <div style="font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin-bottom:.4rem; font-weight:700">Це прототип</div>
+        <p style="font-size:.82rem; color:#d0dff0; line-height:1.5">Після затвердження напрямку — пропрацюємо кожну деталь: тексти, фото, секції. Кожен елемент буде допомагати клієнту прийняти рішення і підвищувати довіру.</p>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:.5rem">
+        <div style="display:flex; align-items:flex-start; gap:.7rem; padding:.6rem .9rem; background:rgba(255,255,255,.04); border-radius:8px; border:1px solid rgba(255,255,255,.07)">
+          <span style="font-size:1.1rem; margin-top:.05rem">⚡</span>
+          <div>
+            <div style="font-size:.85rem; font-weight:600; margin-bottom:.2rem">Швидкість завантаження</div>
+            <div style="font-size:.78rem; color:var(--muted)">PageSpeed 90+ — Google ранжує вище за OpenCart</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:flex-start; gap:.7rem; padding:.6rem .9rem; background:rgba(255,255,255,.04); border-radius:8px; border:1px solid rgba(255,255,255,.07)">
+          <span style="font-size:1.1rem; margin-top:.05rem">🎯</span>
+          <div>
+            <div style="font-size:.85rem; font-weight:600; margin-bottom:.2rem">Один фокус — ліда</div>
+            <div style="font-size:.78rem; color:var(--muted)">Жодних відволікань, лише шлях до заявки</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:flex-start; gap:.7rem; padding:.6rem .9rem; background:rgba(255,255,255,.04); border-radius:8px; border:1px solid rgba(255,255,255,.07)">
+          <span style="font-size:1.1rem; margin-top:.05rem">📱</span>
+          <div>
+            <div style="font-size:.85rem; font-weight:600; margin-bottom:.2rem">Мобільна версія</div>
+            <div style="font-size:.78rem; color:var(--muted)">65% покупців переглядають з телефону</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:flex-start; gap:.7rem; padding:.6rem .9rem; background:rgba(255,255,255,.04); border-radius:8px; border:1px solid rgba(255,255,255,.07)">
+          <span style="font-size:1.1rem; margin-top:.05rem">🔍</span>
+          <div>
+            <div style="font-size:.85rem; font-weight:600; margin-bottom:.2rem">SEO з першого рядка</div>
+            <div style="font-size:.78rem; color:var(--muted)">Оптимізований під «будинок Ременів» та схожі запити</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:flex-start; gap:.7rem; padding:.6rem .9rem; background:rgba(62,201,126,.06); border-radius:8px; border:1px solid rgba(62,201,126,.25)">
+          <span style="font-size:1.1rem; margin-top:.05rem">💬</span>
+          <div>
+            <div style="font-size:.85rem; font-weight:600; color:#5ee89a; margin-bottom:.2rem">Миттєве сповіщення</div>
+            <div style="font-size:.78rem; color:var(--muted)">Заявка з сайту → Telegram Миколі за секунди</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  SLIDE 8 — СТРАТЕГІЯ ТРАФІКУ             -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-8">
+  <div class="deco deco-2"></div>
+  <div class="eyebrow">Залучення клієнтів</div>
+  <h2 style="margin-bottom:1.5rem">Стратегія <span class="accent">трафіку та лідів</span></h2>
+
+  <div class="cards cards-2" style="max-width:900px; width:100%">
+    <div class="channel-card">
+      <h3>🔍 SEO — органічний трафік</h3>
+      <ul>
+        <li>Ключові слова: «будинок Ременів», «котедж Львів купити», «таунхаус приміська зона»</li>
+        <li>Google My Business — поява на картах по запитах «будівельна компанія Львів»</li>
+        <li>Фотозвіти будівництва = свіжий контент щомісяця (SEO + довіра)</li>
+        <li>Каталоги нерухомості: OLX, DOM.RIA, Lun.ua — з посиланням на сайт</li>
+        <li>Результат: перші позиції за 2-3 місяці за нішевими запитами</li>
+      </ul>
+    </div>
+    <div class="channel-card">
+      <h3>🎯 Контекстна реклама</h3>
+      <ul>
+        <li>Google Ads: «купити будинок Ременів», «котедж приміська зона Львів»</li>
+        <li>Facebook/Instagram таргет: геолокація Львів+область, сімейні 28-45 років</li>
+        <li>Ремаркетинг: наздоганяємо тих, хто вже був на сайті</li>
+        <li>Бюджет старту: 5 000–8 000 грн/місяць</li>
+        <li>Результат: перші ліди з <b>першого тижня</b> запуску</li>
+      </ul>
+    </div>
+    <div class="channel-card">
+      <h3>📱 Соціальні мережі</h3>
+      <ul>
+        <li>Instagram + Facebook сторінка: фото будівництва, відео з об'єктів</li>
+        <li>Контент-план: хід будівництва + «огляди» квартир + клієнтські відгуки</li>
+        <li>Синхронізація з сайтом — фото-звіт на сайт = пост в Instagram</li>
+        <li>Stories: «Сьогодні на будівництві»</li>
+      </ul>
+    </div>
+    <div class="channel-card">
+      <h3>📧 Автоматизація лідів</h3>
+      <ul>
+        <li>Форма на сайті → миттєво повідомлення Миколі в Telegram</li>
+        <li>Автовідповідь на email з каталогом PDF</li>
+        <li>CRM-інтеграція для відстеження конверсії</li>
+        <li>Ліди не губляться — кожен запит фіксується</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  SLIDE 9 — ВОРОНКА / ПРОГНОЗ             -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-9">
+  <div class="deco deco-1"></div>
+  <div class="eyebrow">Прогноз результатів</div>
+  <h2 style="margin-bottom:.8rem">Як <span class="accent">6 лідів/місяць</span> стають реальністю</h2>
+
+  <div style="display:flex; align-items:center; gap:2rem; flex-wrap:nowrap; justify-content:center; width:100%; max-width:950px">
+    <div class="funnel" style="gap:.25rem; min-width:340px">
+      <div class="funnel-step" style="padding:.55rem 1rem; font-size:.85rem">
+        <span>👁 Охоплення (SEO + реклама)</span>
+        <span class="funnel-num" style="font-size:1.1rem">1000+</span>
+      </div>
+      <div class="funnel-arrow" style="font-size:.9rem; line-height:1">▼</div>
+      <div class="funnel-step" style="padding:.55rem 1rem; font-size:.85rem">
+        <span>🖱 Відвідувачі сайту</span>
+        <span class="funnel-num" style="font-size:1.1rem">300+</span>
+      </div>
+      <div class="funnel-arrow" style="font-size:.9rem; line-height:1">▼</div>
+      <div class="funnel-step" style="padding:.55rem 1rem; font-size:.85rem">
+        <span>📋 Залишили заявку (2–3%)</span>
+        <span class="funnel-num" style="font-size:1.1rem">6–10</span>
+      </div>
+      <div class="funnel-arrow" style="font-size:.9rem; line-height:1">▼</div>
+      <div class="funnel-step" style="padding:.55rem 1rem; font-size:.85rem; border-color:rgba(62,201,126,.6)!important">
+        <span><b>✅ Цільових лідів/місяць</b></span>
+        <span class="funnel-num" style="color:var(--green); font-size:1.1rem">6+</span>
+      </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:.45rem; flex:1; min-width:0">
+      <div class="card card-good" style="padding:1rem 1.2rem">
+        <h3 style="color:var(--green); margin-bottom:.3rem; font-size:1rem">Місяць 1–2</h3>
+        <p style="font-size:.82rem">Сайт + запуск реклами → перші 2–4 ліди, тест гіпотез і аудиторій</p>
+      </div>
+      <div class="card card-gold" style="padding:1rem 1.2rem">
+        <h3 style="color:var(--gold); margin-bottom:.3rem; font-size:1rem">Місяць 3</h3>
+        <p style="font-size:.82rem">SEO починає давати органіку + оптимізована реклама → стабільно 6+ лідів</p>
+      </div>
+      <div class="card" style="border-color:rgba(80,140,220,.4); padding:1rem 1.2rem">
+        <h3 style="color:#80b0f0; margin-bottom:.3rem; font-size:1rem">Місяць 6+</h3>
+        <p style="font-size:.82rem">Зростання органіки + ремаркетинг → 10–15+ лідів/місяць за того ж бюджету</p>
+      </div>
+      <p style="font-size:.75rem; color:var(--muted); padding:.3rem 0">
+        * 1 угода = від 2 640 000 грн. Навіть 1 клієнт/місяць окупає все за рік.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  SLIDE 10 — ЩО МИ ПРОПОНУЄМО             -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-10">
+  <div class="deco deco-2"></div>
+  <div class="eyebrow">Наша пропозиція</div>
+  <h2 style="margin-bottom:1.5rem">Що входить у <span class="accent">пакет</span></h2>
+
+  <div class="cards cards-3" style="max-width:1000px; width:100%">
+    <div class="card card-gold">
+      <div class="icon">🎨</div>
+      <h3>Лендінг-магніт</h3>
+      <ul style="list-style:none; display:flex; flex-direction:column; gap:.4rem; margin-top:.8rem">
+        <li style="font-size:.85rem; color:#bfcfdf">→ Унікальний дизайн під бренд</li>
+        <li style="font-size:.85rem; color:#bfcfdf">→ Повністю адаптивний</li>
+        <li style="font-size:.85rem; color:#bfcfdf">→ Форми захоплення лідів</li>
+        <li style="font-size:.85rem; color:#bfcfdf">→ Миттєві сповіщення в Telegram</li>
+        <li style="font-size:.85rem; color:#bfcfdf">→ PageSpeed 90+</li>
+        <li style="font-size:.85rem; color:#bfcfdf">→ Хостинг 1 рік включено</li>
+      </ul>
+      <div style="margin-top:1rem">
+        <span class="tag tag-gold">Разово</span>
+        <span class="tag tag-blue">2-3 тижні</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="icon">🔍</div>
+      <h3>SEO-просування</h3>
+      <ul style="list-style:none; display:flex; flex-direction:column; gap:.4rem; margin-top:.8rem">
+        <li style="font-size:.85rem; color:#bfcfdf">→ Технічна SEO-оптимізація</li>
+        <li style="font-size:.85rem; color:#bfcfdf">→ Google My Business</li>
+        <li style="font-size:.85rem; color:#bfcfdf">→ Семантичне ядро</li>
+        <li style="font-size:.85rem; color:#bfcfdf">→ Розміщення в каталогах</li>
+        <li style="font-size:.85rem; color:#bfcfdf">→ Щомісячна SEO-звітність</li>
+      </ul>
+      <div style="margin-top:1rem">
+        <span class="tag tag-green">Щомісяця</span>
+        <span class="tag tag-blue">Від міс. 1</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="icon">🎯</div>
+      <h3>Контекстна реклама</h3>
+      <ul style="list-style:none; display:flex; flex-direction:column; gap:.4rem; margin-top:.8rem">
+        <li style="font-size:.85rem; color:#bfcfdf">→ Google Ads налаштування</li>
+        <li style="font-size:.85rem; color:#bfcfdf">→ Facebook/Instagram таргет</li>
+        <li style="font-size:.85rem; color:#bfcfdf">→ Ремаркетинг</li>
+        <li style="font-size:.85rem; color:#bfcfdf">→ A/B тест оголошень</li>
+        <li style="font-size:.85rem; color:#bfcfdf">→ Щотижневі звіти</li>
+      </ul>
+      <div style="margin-top:1rem">
+        <span class="tag tag-green">Щомісяця</span>
+        <span class="tag tag-blue">Від міс. 1</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-gold" style="max-width:1000px; margin-top:1.2rem; width:100%; text-align:center">
+    <b style="color:var(--gold2)">Бонус при старті:</b>
+    <span style="color:#bfcfdf"> PDF-каталог проєктів для автовідправки · Шаблон Telegram-сповіщень · Підключення Google Analytics + Meta Pixel</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!--  SLIDE 11 — НАСТУПНИЙ КРОК               -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="slide" id="slide-11">
+  <div class="deco deco-1"></div>
+  <div class="deco deco-2"></div>
+  <div style="text-align:center; z-index:1; max-width:700px">
+    <div class="eyebrow">Готові стартувати</div>
+    <h2 style="margin-bottom:1rem">Перший ліда з'явиться<br><span class="accent">вже за 7 днів</span> після старту</h2>
+    <p class="subtitle">Поки конкуренти перехоплюють ваших клієнтів —<br>кожен день без сайту коштує реальних грошей.</p>
+
+    <div class="cta-box" style="margin: 1.8rem auto 0">
+      <h3 style="margin-bottom:1.2rem; color:var(--gold2)">Три кроки до першого ліда</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">Зустріч<br>та договір</div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:var(--green); color:var(--navy)">2</div>
+          <div class="step-text">Дизайн<br>та розробка<br>(2-3 тижні)</div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#5090e0; color:var(--navy)">3</div>
+          <div class="step-text">Запуск<br>реклами →<br>перші ліди</div>
+        </div>
+      </div>
+
+      <div style="margin-top:1.8rem; display:flex; gap:1rem; flex-wrap:wrap; justify-content:center">
+        <div style="background:rgba(255,255,255,.06); border-radius:10px; padding:.8rem 1.4rem; font-size:.9rem">
+          📞 <b>(068) 502-61-99</b>
+        </div>
+        <div style="background:rgba(255,255,255,.06); border-radius:10px; padding:.8rem 1.4rem; font-size:.9rem">
+          🌐 <a href="https://neuronics.work/uk" target="_blank" style="color:var(--gold); text-decoration:none; font-weight:700">neuronics.work</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /slides -->
+
+<script>
+  const TOTAL = 11;
+  let current = 1;
+
+  function buildNav() {
+    const nav = document.getElementById('navDots');
+    for (let i = 1; i <= TOTAL; i++) {
+      const d = document.createElement('div');
+      d.className = 'dot' + (i === 1 ? ' active' : '');
+      d.onclick = () => goTo(i);
+      nav.appendChild(d);
+    }
+  }
+
+  function goTo(n) {
+    if (n < 1 || n > TOTAL) return;
+    document.getElementById('slide-' + current).classList.remove('active');
+    document.querySelectorAll('.dot')[current - 1].classList.remove('active');
+    current = n;
+    document.getElementById('slide-' + current).classList.add('active');
+    document.querySelectorAll('.dot')[current - 1].classList.add('active');
+    document.getElementById('slideCounter').textContent = current + ' / ' + TOTAL;
+    document.getElementById('progressBar').style.width = ((current / TOTAL) * 100) + '%';
+  }
+
+  function changeSlide(dir) { goTo(current + dir); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')                    { e.preventDefault(); changeSlide(-1); }
+  });
+
+  // Touch swipe — horizontal (primary) or vertical
+  let startX = 0, startY = 0;
+  document.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  });
+  document.addEventListener('touchend', e => {
+    const dx = startX - e.changedTouches[0].clientX;
+    const dy = startY - e.changedTouches[0].clientY;
+    if (Math.abs(dx) >= Math.abs(dy)) {
+      if (Math.abs(dx) > 40) changeSlide(dx > 0 ? 1 : -1);
+    } else {
+      if (Math.abs(dy) > 40) changeSlide(dy > 0 ? 1 : -1);
+    }
+  });
+
+  buildNav();
+  document.getElementById('progressBar').style.width = (1 / TOTAL * 100) + '%';
+</script>
+</body>
+</html>
