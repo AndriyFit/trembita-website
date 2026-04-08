@@ -99,7 +99,7 @@
     .hero-badges { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
     .badge { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent); background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.2); border-radius: 100px; padding: 6px 16px; letter-spacing: 1px; }
     .hero-img { width: 100%; border-radius: 20px; overflow: hidden; margin-top: 20px; }
-    .hero-img img { width: 100%; display: block; border-radius: 20px; }
+    .hero-img img, .hero-img video { width: 100%; display: block; border-radius: 20px; object-fit: cover; }
 
     /* ─── SECTION ─── */
     .section { padding: 80px 32px; max-width: 1200px; margin: 0 auto; }
@@ -223,7 +223,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 
   <div class="hero-img">
-    <img src="/assets/kontynent/hero-aerial.jpg" alt="Котеджне містечко Континент — аерозйомка 3D візуалізація" loading="eager">
+    <video autoplay loop muted playsinline preload="auto" poster="/assets/kontynent/hero-aerial.jpg">
+      <source src="/assets/kontynent/video-flyover.mp4" type="video/mp4">
+      <img src="/assets/kontynent/hero-aerial.jpg" alt="Котеджне містечко Континент — аерозйомка 3D візуалізація">
+    </video>
   </div>
 </section>
 
