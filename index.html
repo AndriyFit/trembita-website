@@ -173,6 +173,26 @@
     #investor { position: relative; z-index: 1; }
     #investor video { width: 100%; display: block; max-height: 85vh; object-fit: contain; background: var(--bg); }
 
+    /* ─── KONTYNENT ─── */
+    #kontynent { position: relative; z-index: 1; padding: 100px 32px 80px; content-visibility: auto; contain-intrinsic-size: 0 800px; }
+    .kontynent-inner { max-width: 1100px; margin: 0 auto; }
+    .kontynent-label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--accent); opacity: 0.7; margin-bottom: 8px; text-align: center; }
+    .kontynent-name { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 700; text-align: center; margin-bottom: 16px; background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, var(--accent-light) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px; }
+    .kontynent-desc { text-align: center; color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7; max-width: 700px; margin: 0 auto 40px; }
+    .kontynent-video { width: 100%; border-radius: 20px; overflow: hidden; margin-bottom: 40px; }
+    .kontynent-video video { width: 100%; display: block; border-radius: 20px; }
+    .kontynent-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 40px; }
+    .kontynent-gallery img { width: 100%; border-radius: 16px; aspect-ratio: 16/10; object-fit: cover; transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; }
+    .kontynent-gallery img:hover { transform: scale(1.02); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+    .kontynent-stats { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px; }
+    .kontynent-stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 20px 28px; text-align: center; min-width: 140px; }
+    .kontynent-stat-val { font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--accent); display: block; }
+    .kontynent-stat-lbl { font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; display: block; }
+    .kontynent-more { display: block; text-align: center; margin-top: 16px; }
+    .kontynent-more a { color: var(--accent); text-decoration: none; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.95rem; border-bottom: 1px solid rgba(201,168,76,0.3); padding-bottom: 2px; transition: border-color 0.2s; }
+    .kontynent-more a:hover { border-color: var(--accent); }
+    @media (max-width: 768px) { .kontynent-gallery { grid-template-columns: 1fr; } .kontynent-stats { gap: 12px; } .kontynent-stat { min-width: 120px; padding: 16px 20px; } }
+
     /* ─── SPECS ─── */
     #specs { position: relative; z-index: 1; content-visibility: auto; contain-intrinsic-size: 0 300px; }
     .specs-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 40px; max-width: 1000px; margin: 0 auto; padding: 100px 32px; text-align: center; }
@@ -321,7 +341,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <span class="nav-logo-text">Трембіта</span>
     </a>
     <div class="nav-links">
-      <a href="/kontynent/">Континент</a>
+      <a href="#kontynent">ЖК Континент</a>
       <a href="#features">Житло</a>
       <a href="#specs">Про нас</a>
       <a href="#testimonials">Відгуки</a>
@@ -363,6 +383,50 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <video autoplay loop muted playsinline preload="auto">
     <source src="assets/investor.mp4" type="video/mp4">
   </video>
+</section>
+
+<!-- ЖК Континент -->
+<section id="kontynent">
+  <div class="kontynent-inner">
+    <span class="kontynent-label">житловий комплекс</span>
+    <h2 class="kontynent-name">Континент</h2>
+    <p class="kontynent-desc">Сучасні котеджі 105–112 м² у 15 хвилинах від центру Львова. Всі комунікації в ціні, розтермінування 0% на 2 роки. Будівельна компанія «Трембіта» з 2006 року.</p>
+
+    <div class="kontynent-video">
+      <video autoplay loop muted playsinline preload="auto" poster="assets/kontynent/hero-aerial.jpg">
+        <source src="assets/kontynent/video-flyover.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="kontynent-gallery">
+      <img src="assets/kontynent/render-facade.jpg" alt="ЖК Континент — фасад таунхаусів" loading="lazy">
+      <img src="assets/kontynent/render-aerial.jpg" alt="ЖК Континент — аеровид комплексу" loading="lazy">
+      <img src="assets/kontynent/render-back.jpg" alt="ЖК Континент — задній фасад з балконами" loading="lazy">
+    </div>
+
+    <div class="kontynent-stats">
+      <div class="kontynent-stat">
+        <span class="kontynent-stat-val">$52 500</span>
+        <span class="kontynent-stat-lbl">від</span>
+      </div>
+      <div class="kontynent-stat">
+        <span class="kontynent-stat-val">105–112</span>
+        <span class="kontynent-stat-lbl">м² площа</span>
+      </div>
+      <div class="kontynent-stat">
+        <span class="kontynent-stat-val">2</span>
+        <span class="kontynent-stat-lbl">поверхи</span>
+      </div>
+      <div class="kontynent-stat">
+        <span class="kontynent-stat-val">0%</span>
+        <span class="kontynent-stat-lbl">розтермінування</span>
+      </div>
+    </div>
+
+    <div class="kontynent-more">
+      <a href="/kontynent/">Планування, генплан та деталі →</a>
+    </div>
+  </div>
 </section>
 
 <!-- Specs -->
